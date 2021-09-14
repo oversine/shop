@@ -29,7 +29,13 @@ public class MemberDao {
 	 	stmt.setInt(4, member.getMemberAge());
 	 	stmt.setString(5, member.getMemberGender());
 			 	
-		stmt.executeUpdate();	
+		int row = stmt.executeUpdate();	
+		
+		if(row == 1) {
+			System.out.println("가입 성공");
+		} else {
+			System.out.println("가입 실패");
+		}
 		
 		stmt.close();
 		conn.close();
