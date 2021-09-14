@@ -17,7 +17,6 @@
 	}
 %>
 <div class="container">
-	<br>
 	<div class="jumbotron text-center">
 		<h1>로그인</h1>
 	</div>
