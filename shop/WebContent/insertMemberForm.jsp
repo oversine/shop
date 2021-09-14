@@ -12,7 +12,7 @@
 	// 로그인 상태에서 회원가입 페이지 접근 불가
 	if(session.getAttribute("loginMember") != null){
 		// 이전 웹 브라우저로 돌아가 다른 곳을 요청하도록 하는 메서드
-		response.sendRedirect("./index.jsp");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 %>
 <div class="container">

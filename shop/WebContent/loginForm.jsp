@@ -12,7 +12,7 @@
 	// session.getAttribute("loginMember") --> null
 	if(session.getAttribute("loginMember") != null) {
 		System.out.println("로그인 상태입니다.");
-		response.sendRedirect("./index.jsp");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
 	}
 %>

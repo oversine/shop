@@ -19,7 +19,7 @@
 	// 로그인 성공시 ID, 비밀번호 값, 실패시 null
 	if(returnMember == null) {
 		System.out.println("실패");
-		response.sendRedirect("./loginForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 		return;
 	} else {
 		System.out.println("성공");
@@ -29,7 +29,7 @@
 		// request, session 등의 내부에 이미 만들어져있는 변수를 JSP내장 객체라고 칭함
 		// 나만의 공간에 변수를 생성 (session)
 		session.setAttribute("loginMember", returnMember);
-		response.sendRedirect("./index.jsp");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
 	}
 %>

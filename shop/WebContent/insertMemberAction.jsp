@@ -7,18 +7,18 @@
 	//로그인 상태에서 회원가입 페이지 접근 불가
 	if(session.getAttribute("loginMember") != null){
 		// 이전 웹 브라우저로 돌아가 다른 곳을 요청하도록 하는 메서드
-		response.sendRedirect("./index.jsp");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 	
 	
 	// 문제가 생겨 값이 아예 안들어오거나 공백을 입력받고 넘어온 경우
 	if(request.getParameter("memberId") == null || request.getParameter("memberPw") == null || request.getParameter("memberAge") == null || request.getParameter("memberGender") == null || request.getParameter("memberName") == null){
-		response.sendRedirect("./index.jsp");
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
 	}
 	
 	if(request.getParameter("memberId").equals("") || request.getParameter("memberPw").equals("") || request.getParameter("memberAge").equals("") || request.getParameter("memberGender").equals("") || request.getParameter("memberName").equals("")){
-		response.sendRedirect("./insertMemberForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/insertMemberForm.jsp");
 		return;
 	}
 	
@@ -45,5 +45,5 @@
 	
 	memberDao.insertMember(member);
 	
-	response.sendRedirect("./index.jsp");
+	response.sendRedirect(request.getContextPath() + "/index.jsp");
 %>
