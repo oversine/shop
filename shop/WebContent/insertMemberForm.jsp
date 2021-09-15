@@ -1,5 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%	
+	// 로그인 상태에서 회원가입 페이지 접근 불가
+	if(session.getAttribute("loginMember") != null){
+		// 이전 웹 브라우저로 돌아가 다른 곳을 요청하도록 하는 메서드
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +14,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<%	
-	// 로그인 상태에서 회원가입 페이지 접근 불가
-	if(session.getAttribute("loginMember") != null){
-		// 이전 웹 브라우저로 돌아가 다른 곳을 요청하도록 하는 메서드
-		response.sendRedirect(request.getContextPath() + "/index.jsp");
-	}
-%>
 <div class="container">
+	<!-- start : submenu include -->
+	<div>
+		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
+	</div>
+	<!-- end : submenu include -->
 	<div class="jumbotron text-center">
 		<h1>회원가입</h1>
 	</div>
