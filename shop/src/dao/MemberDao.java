@@ -10,40 +10,64 @@ import commons.DBUtil;
 import vo.Member;
 
 public class MemberDao {
-	// 3.2 관리자 회원 목록 검색
-		public ArrayList<Member> selectMemberListAllBySearchMemberId(int beginRow, int rowPerPage, String searchMemberId) throws ClassNotFoundException, SQLException{
-			ArrayList<Member> list = new ArrayList<Member>();
+	// 3.5 관리자 회원 레벨 수정
+	public void updateMemberLevelByAdmin(Member member) {
 		
-			DBUtil dbUtil = new DBUtil();
-			Connection conn = dbUtil.getConnection();
-			String sql = "SELECT member_no memberNO, member_id memberId, member_level memberLevel, member_name memberName, member_age memberAge, member_gender memberGender, update_date updateDate, create_date createDate FROM member WHERE member_id LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, "%"+searchMemberId+"%");
-			stmt.setInt(2, beginRow);
-		 	stmt.setInt(3, rowPerPage);
+	}
+	
+	// 3.4 관리자 회원 비밀번호 수정
+	public void updateMemberPwByAdimin(Member member) {
+		// no, 수정 pw -> 업데이트 처리
+	}
+	
+	// 3.3 관리자 회원 삭제
+	public void deleteMemberByKey(int memberNo) {
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM member WHERE member_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, memberNo);
+		
+		stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	// 3.2 관리자 회원 목록 검색
+	public ArrayList<Member> selectMemberListAllBySearchMemberId(int beginRow, int rowPerPage, String searchMemberId) throws ClassNotFoundException, SQLException{
+		ArrayList<Member> list = new ArrayList<Member>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT member_no memberNO, member_id memberId, member_level memberLevel, member_name memberName, member_age memberAge, member_gender memberGender, update_date updateDate, create_date createDate FROM member WHERE member_id LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+searchMemberId+"%");
+		stmt.setInt(2, beginRow);
+	 	stmt.setInt(3, rowPerPage);
 		 	
-		 	// System.out.println(stmt);
+	 	// System.out.println(stmt);
 		 	
-		 	ResultSet rs = stmt.executeQuery();
+	 	ResultSet rs = stmt.executeQuery();
 			
-			while(rs.next()){
-				Member m = new Member();
-				m.setMemberNo(rs.getInt("memberNo"));
-				m.setMemberId(rs.getString("memberId"));
-				m.setMemberLevel(rs.getInt("memberLevel"));
-				m.setMemberName(rs.getString("memberName"));
-				m.setMemberAge(rs.getInt("memberAge"));
-				m.setMemberGender(rs.getString("memberGender"));
-				m.setUpdateDate(rs.getString("updateDate"));
-				m.setCreateDate(rs.getString("createDate"));
-				list.add(m);
-			}
-			rs.close();
-			stmt.close();
-			conn.close();
-		 	
-			return list;
-		}	
+		while(rs.next()){
+			Member m = new Member();
+			m.setMemberNo(rs.getInt("memberNo"));
+			m.setMemberId(rs.getString("memberId"));
+			m.setMemberLevel(rs.getInt("memberLevel"));
+			m.setMemberName(rs.getString("memberName"));
+			m.setMemberAge(rs.getInt("memberAge"));
+			m.setMemberGender(rs.getString("memberGender"));
+			m.setUpdateDate(rs.getString("updateDate"));
+			m.setCreateDate(rs.getString("createDate"));
+			list.add(m);
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+	
+		return list;
+	}	
 	
 	
 	// 3.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
