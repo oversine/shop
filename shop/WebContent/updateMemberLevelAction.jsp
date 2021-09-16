@@ -18,4 +18,6 @@
 	member.setMemberLevel(memberLevel);
 	
 	memberDao.updateMemberPwByAdimin(member);
+	
+	response.sendRedirect(request.getContextPath()+"/admin/selectMemberList.jsp");
 %>

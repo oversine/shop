@@ -4,18 +4,20 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	if(request.getParameter("memberPw") == null){
+	if(request.getParameter("newPw") == null){
 		response.sendRedirect(request.getContextPath() + "/updateMemberPwForm.jsp");
 		return;
 	}
 
 	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
-	String memberPw = request.getParameter("memberPw");
+	String newPw = request.getParameter("newPw");
 	
 	MemberDao memberDao = new MemberDao();
 	Member member = new Member();
 	member.setMemberNo(memberNo);
-	member.setMemberPw(memberPw);
+	member.setMemberPw(newPw);
 	
 	memberDao.updateMemberPwByAdimin(member);
+	
+	response.sendRedirect(request.getContextPath()+"/admin/selectMemberList.jsp");
 %>

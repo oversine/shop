@@ -21,6 +21,11 @@
 	request.setCharacterEncoding("utf-8");
 
 	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
+	
+	if(request.getParameter("memberNo") == null){
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
+		return;
+	}
 %>
 <div class="container">
 	<!-- start : submenu include -->
@@ -29,12 +34,13 @@
 	</div>
 	<!-- end : submenu include -->
 	<div class="jumbotron text-center">
-		<h1>로그인</h1>
+		<h1>비밀번호 변경</h1>
 	</div>
 	<form method="post" action="<%=request.getContextPath()%>/updateMemberLevelAction.jsp">
+		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
-		<label for="memberPw">변경하실 비밀번호 : </label>
-			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" name="memberPw" >
+		<label for="newPw">변경하실 비밀번호 : </label>
+			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" name="newPw" >
 		</div>
 		<div><button type="submit" class="btn btn-primary">수정</button></div>
 	</form>
