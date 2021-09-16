@@ -11,22 +11,42 @@ import vo.Member;
 
 public class MemberDao {
 	// 3.5 관리자 회원 레벨 수정
-	public void updateMemberLevelByAdmin(Member member) {
+	public void updateMemberLevelByAdmin(Member member) throws ClassNotFoundException, SQLException {
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "UPDATE member SET member_level=? WHERE member_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, member.getMemberLevel());
+		stmt.setInt(2, member.getMemberNo());
 		
+		stmt.executeQuery();
+		
+		stmt.close();
+		conn.close();
 	}
 	
 	// 3.4 관리자 회원 비밀번호 수정
-	public void updateMemberPwByAdimin(Member member) {
-		// no, 수정 pw -> 업데이트 처리
+	public void updateMemberPwByAdimin(Member member) throws ClassNotFoundException, SQLException {
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "UPDATE member SET member_pw=? WHERE member_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, member.getMemberPw());
+		stmt.setInt(2, member.getMemberNo());
+		
+		stmt.executeQuery();
+		
+		stmt.close();
+		conn.close();
 	}
 	
 	// 3.3 관리자 회원 삭제
-	public void deleteMemberByKey(int memberNo) {
+	public void deleteMemberByKey(int memberNo) throws ClassNotFoundException, SQLException {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = "DELETE FROM member WHERE member_no=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, memberNo);
+		stmt.setInt(1, memberNo);
 		
 		stmt.executeUpdate();
 		

@@ -98,13 +98,13 @@
 					<td><%=m.getUpdateDate()%></td>
 					<td><%=m.getCreateDate()%></td>
 					<td>
-						<a href="<%request.getContextPath()%>/admin/updateMemberLevelForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
+						<a href="<%=request.getContextPath()%>/admin/updateMemberLevelForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%request.getContextPath()%>/admin/updateMemberPwForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
+						<a href="<%=request.getContextPath()%>/admin/updateMemberPwForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%request.getContextPath()%>/admin/deleteMember.jsp?membberNo=<%=m.getMemberNo()%>">탈퇴</a>
+						<a href="<%=request.getContextPath()%>/admin/deleteMember.jsp?membberNo=<%=m.getMemberNo()%>">탈퇴</a>
 					</td>
 				</tr>
 			<%
