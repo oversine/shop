@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container">
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
@@ -22,5 +23,6 @@
 	<!-- end : submenu include -->
 	<h1>관리자 페이지</h1>
 	<div><%=loginMember.getMemberId()%>님 반갑습니다.</div>
+</div>
 </body>
 </html>

@@ -57,7 +57,7 @@
 	<div class="jumbotron text-center">
 		<h1>회원 목록</h1>
 	</div>
-	<table class="table table-striped">
+	<table class="table table-striped" style="text-align: center;">
 		<thead>
 			<tr>
 				<th>memberNo</th>
@@ -99,13 +99,13 @@
 					<td><%=m.getUpdateDate()%></td>
 					<td><%=m.getCreateDate()%></td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/updateMemberLevelForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
+						<a class="btn btn btn-primary" href="<%=request.getContextPath()%>/admin/updateMemberLevelForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/updateMemberPwForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
+						<a class="btn btn btn-primary" href="<%=request.getContextPath()%>/admin/updateMemberPwForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/deleteMember.jsp?memberNo=<%=m.getMemberNo()%>">탈퇴</a>
+						<a class="btn btn-danger" href="<%=request.getContextPath()%>/admin/deleteMember.jsp?memberNo=<%=m.getMemberNo()%>">탈퇴</a>
 					</td>
 				</tr>
 			<%
