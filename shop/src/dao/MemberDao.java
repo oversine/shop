@@ -10,6 +10,36 @@ import commons.DBUtil;
 import vo.Member;
 
 public class MemberDao {
+	// 4. 특정 회원정보 출력
+	public Member selectMember(int memberNo) throws ClassNotFoundException, SQLException {
+		Member returnMember = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT member_id memberId, member_name memberName, member_age memberAge, member_gender memberGender FROM member WHERE member_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, memberNo);
+				
+		// System.out.println(stmt + "<-- stmt");
+				
+		ResultSet rs = stmt.executeQuery();
+				
+		if(rs.next()) {
+			returnMember = new Member();
+			returnMember.setMemberId(rs.getString("memberId"));
+			returnMember.setMemberName(rs.getString("memberName"));
+			returnMember.setMemberAge(rs.getInt("memberAge"));
+			returnMember.setMemberGender(rs.getString("memberGender"));
+			return returnMember;
+		}
+				
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return returnMember;
+	}
+	
 	// 3.5 관리자 회원 레벨 수정
 	public void updateMemberLevelByAdmin(Member member) throws ClassNotFoundException, SQLException {
 		// System.out.println(member.getMemberNo() + "<-- levelByAdmin param : memberNo");
@@ -22,7 +52,7 @@ public class MemberDao {
 		stmt.setInt(1, member.getMemberLevel());
 		stmt.setInt(2, member.getMemberNo());
 		
-		// System.out.println(stmt);
+		System.out.println(stmt);
 		
 		stmt.executeQuery();
 		

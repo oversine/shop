@@ -8,16 +8,18 @@
 		response.sendRedirect(request.getContextPath() + "/updateMemberLevelForm.jsp");
 		return;
 	}
-
+	
 	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	int memberLevel = Integer.parseInt(request.getParameter("memberLevel"));
+	
+	// System.out.println(memberLevel);
 	
 	MemberDao memberDao = new MemberDao();
 	Member member = new Member();
 	member.setMemberNo(memberNo);
 	member.setMemberLevel(memberLevel);
 	
-	memberDao.updateMemberPwByAdimin(member);
+	memberDao.updateMemberLevelByAdmin(member);
 	
 	response.sendRedirect(request.getContextPath()+"/admin/selectMemberList.jsp");
 %>

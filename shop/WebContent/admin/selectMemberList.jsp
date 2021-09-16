@@ -54,7 +54,9 @@
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
-	<h1>회원 목록</h1>
+	<div class="jumbotron text-center">
+		<h1>회원 목록</h1>
+	</div>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -79,7 +81,6 @@
 					<td><%=m.getMemberNo()%></td>
 					<td><%=m.getMemberId()%></td>
 					<td>
-						<%=m.getMemberLevel()%>
 						<% 
 							if(m.getMemberLevel() == 0) {
 						%>
@@ -98,13 +99,13 @@
 					<td><%=m.getUpdateDate()%></td>
 					<td><%=m.getCreateDate()%></td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/updateMemberLevelForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
+						<a href="<%=request.getContextPath()%>/admin/updateMemberLevelForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/updateMemberPwForm.jsp?membberNo=<%=m.getMemberNo()%>">수정</a>
+						<a href="<%=request.getContextPath()%>/admin/updateMemberPwForm.jsp?memberNo=<%=m.getMemberNo()%>">수정</a>
 					</td>
 					<td>
-						<a href="<%=request.getContextPath()%>/admin/deleteMember.jsp?membberNo=<%=m.getMemberNo()%>">탈퇴</a>
+						<a href="<%=request.getContextPath()%>/admin/deleteMember.jsp?memberNo=<%=m.getMemberNo()%>">탈퇴</a>
 					</td>
 				</tr>
 			<%
@@ -114,7 +115,7 @@
 	</table><br>
 	
 	<!-- 페이징 번호 -->
-	<div>
+	<div style="text-align: center;">
 		<%	
 			if(currentPage > 1){
 		%>	
@@ -150,11 +151,11 @@
 		%>		
 		</div><br>
 		<!-- memberId로 검색 -->
-		<div>
+		<div style="text-align: center;">
 			<form action="<%=request.getContextPath()%>/admin/selectMemberList.jsp" method="get">
-				memberId :
+				ID 검색 :
 				<input type="text" name="memberId">
-				<button type="submit">검색</button>
+				<button type="submit" class="btn btn-primary">검색</button>
 			</form>
 		</div>
 </body>

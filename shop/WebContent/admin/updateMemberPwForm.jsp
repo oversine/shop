@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import ="vo.*"%>
+<%@ page import ="dao.*"%>
 <%
 	request.setCharacterEncoding("utf-8");		
 
@@ -26,21 +27,40 @@
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
 	}
+	
+	MemberDao memberDao = new MemberDao();
+	Member member = memberDao.selectMember(memberNo);
 %>
 <div class="container">
 	<!-- start : submenu include -->
 	<div>
-		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
+		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
 	<div class="jumbotron text-center">
 		<h1>비밀번호 변경</h1>
 	</div>
-	<form method="post" action="<%=request.getContextPath()%>/updateMemberLevelAction.jsp">
+	<form method="post" action="./updateMemberPwAction.jsp">
 		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
 		<label for="newPw">변경하실 비밀번호 : </label>
 			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" name="newPw" >
+		</div>
+		<div class="form-group">
+		<label for="memberId">Id : </label>
+			<input type ="text" class="form-control" value="<%=member.getMemberId()%>" readonly="readonly" >
+		</div>
+		<div class="form-group">
+		<label for="memberName">이름 : </label>
+			<input type ="text" class="form-control" value="<%=member.getMemberName()%>" readonly="readonly" >
+		</div>
+		<div class="form-group">
+		<label for="memberAge">나이 : </label>
+			<input type ="number" class="form-control" value="<%=member.getMemberAge()%>" readonly="readonly" >
+		</div>
+		<div class="form-group">
+		<label for="memberGender">성별 : </label>
+			<input type ="text" class="form-control" value="<%=member.getMemberGender()%>" readonly="readonly" >
 		</div>
 		<div><button type="submit" class="btn btn-primary">수정</button></div>
 	</form>
