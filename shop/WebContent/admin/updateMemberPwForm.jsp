@@ -20,13 +20,13 @@
 <body>
 <%
 	request.setCharacterEncoding("utf-8");
-
-	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	
 	if(request.getParameter("memberNo") == null){
-		response.sendRedirect(request.getContextPath() + "/index.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/selectMemberList.jsp");
 		return;
 	}
+	
+	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	
 	MemberDao memberDao = new MemberDao();
 	Member member = memberDao.selectMember(memberNo);

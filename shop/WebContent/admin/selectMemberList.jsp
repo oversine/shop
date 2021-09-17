@@ -119,8 +119,8 @@
 		<%	
 			if(currentPage > 1){
 		%>	
-				<a class="btn btn-secondary" href="./selectMemberList.jsp?currentPage=1&memberId=<%=memberId%>>">처음으로</a>
-				<a class="btn btn-success" href="./selectMemberList.jsp?currentPage=<%=currentPage-1%>&memberId=<%=memberId%>">이전</a>
+				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=1&memberId=<%=memberId%>>">처음으로</a>
+				<a class="btn btn-success" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=<%=currentPage-1%>&memberId=<%=memberId%>">이전</a>
 		<%
 			}
 			int lastPage = memberDao.selectLastPage(ROW_PER_PAGE, memberId);
@@ -132,11 +132,11 @@
 			for (int i=startPage; i <= endPage; i++) { // 각 페이지 시작번호 부터 끝번호 까지 반복해 나열
 				if(currentPage == i) { // 현재 페이지 번호만을 다르게 표시해 체크함
 		%>
-					<a class="btn btn-secondary" href="./selectMemberList.jsp?currentPage=<%=i%>&memberId=<%=memberId%>"><%=i%></a>
+					<a class="btn btn-secondary" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=<%=i%>&memberId=<%=memberId%>"><%=i%></a>
 		<%
 				} else {
 		%>
-					<a class="btn btn-outline-secondary" href="./selectMemberList.jsp?currentPage=<%=i%>&memberId=<%=memberId%>"><%=i%></a>	
+					<a class="btn btn-outline-secondary" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=<%=i%>&memberId=<%=memberId%>"><%=i%></a>	
 		<%		
 				}
 			}
@@ -144,8 +144,8 @@
 			
 			if(currentPage < lastPage){ // 현재 페이지가 마지막이 아닌 경우에만 다음과 끝 버튼 출력
 		%>	
-				<a class="btn btn-primary" href="./selectMemberList.jsp?currentPage=<%=currentPage+1%>&memberId=<%=memberId%>">다음</a>
-				<a class="btn btn-secondary" href="./selectMemberList.jsp?currentPage=<%=lastPage%>&memberId=<%=memberId%>">끝으로</a>
+				<a class="btn btn-primary" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=<%=currentPage+1%>&memberId=<%=memberId%>">다음</a>
+				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/admin/selectMemberList.jsp?currentPage=<%=lastPage%>&memberId=<%=memberId%>">끝으로</a>
 		<%
 				}
 		%>		

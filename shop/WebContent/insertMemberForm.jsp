@@ -23,10 +23,25 @@
 	<div class="jumbotron text-center">
 		<h1>회원가입</h1>
 	</div>
-	<form action ="<%=request.getContextPath()%>/insertMemberAction.jsp" method ="post">
+	<%
+		String memberIdCheck = "";
+		if(request.getParameter("memberIdCheck") != null) {
+			memberIdCheck = request.getParameter("memberIdCheck");
+		}
+	%>
+	<!-- 아이디 사용가능 중복여부 확인 폼 -->
+	<form action="<%=request.getContextPath()%>/selectMemberIdCheckAction.jsp" method="post">
 		<div class="form-group">
 		<label for="memberId">Id : </label>
-			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" name="memberId" >
+			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" name="memberIdCheck">
+		</div>
+		<button type="submit" class="btn btn-primary">중복 검사</button>
+	</form><br>
+	
+	<!-- 회원가입 폼 -->
+	<form action ="<%=request.getContextPath()%>/insertMemberAction.jsp" method ="post">
+		<div class="form-group">
+			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" name="memberId" readonly="readonly" value="<%=memberIdCheck%>">
 		</div>
 		<div class="form-group">
 		<label for="memberPw">비밀번호 : </label>

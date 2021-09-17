@@ -10,6 +10,31 @@ import commons.DBUtil;
 import vo.Member;
 
 public class MemberDao {
+	// 5. ID 중복검사 확인
+	public String selectMemberId(String memberIdCheck) throws ClassNotFoundException, SQLException {
+		String memberId = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT member_id memberId FROM member WHERE member_id=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, memberIdCheck);
+		
+		// System.out.println(stmt + "<-- selectMemberId.stmt");
+		
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			memberId = rs.getString("memberId");
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return memberId;
+	}
+	
+	
 	// 4. 특정 회원정보 출력
 	public Member selectMember(int memberNo) throws ClassNotFoundException, SQLException {
 		Member returnMember = null;
@@ -47,7 +72,7 @@ public class MemberDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "UPDATE member SET member_level=? WHERE member_no=?";
+		String sql = "UPDATE member SET member_level=?, update_date=NOW() WHERE member_no=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, member.getMemberLevel());
 		stmt.setInt(2, member.getMemberNo());
@@ -67,7 +92,7 @@ public class MemberDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "UPDATE member SET member_pw=PASSWORD(?) WHERE member_no=?";
+		String sql = "UPDATE member SET member_pw=PASSWORD(?), update_date=NOW() WHERE member_no=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, member.getMemberPw());
 		stmt.setInt(2, member.getMemberNo());

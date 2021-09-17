@@ -20,13 +20,13 @@
 <body>
 <%
 	request.setCharacterEncoding("utf-8");
-
-	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	
 	if(request.getParameter("memberNo") == null){
-		response.sendRedirect(request.getContextPath() + "/index.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/selectMemberList.jsp");
 		return;
 	}
+	
+	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	
 	MemberDao memberDao = new MemberDao();
 	Member member = memberDao.selectMember(memberNo);
@@ -41,7 +41,7 @@
 		<h1>회원 등급 변경</h1>
 	</div>
 	<form method="post" action="./updateMemberLevelAction.jsp">
-		<input type="hidden" name="memberNo" value="<%=memberNo %>">
+		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
 			<label for="memberLevel">변경하실 회원 레벨 : </label>
 			<select class="form-control" name = "memberLevel">

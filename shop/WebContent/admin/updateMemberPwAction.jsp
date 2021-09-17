@@ -3,9 +3,11 @@
 <%@ page import = "dao.*" %>
 <%
 	request.setCharacterEncoding("UTF-8");
+	
 
+	// 변경할 비밀번호 값을 입력하지 않고 공백상태로 시도한 경우 수정 폼 페이지로 강제 이동
 	if(request.getParameter("newPw") == null){
-		response.sendRedirect(request.getContextPath() + "/updateMemberPwForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/updateMemberPwForm.jsp");
 		return;
 	}
 

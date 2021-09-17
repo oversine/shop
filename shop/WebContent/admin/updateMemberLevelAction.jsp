@@ -4,8 +4,8 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	if(request.getParameter("memberNo") == null){
-		response.sendRedirect(request.getContextPath() + "/updateMemberLevelForm.jsp");
+	if(request.getParameter("memberLevel") == null){
+		response.sendRedirect(request.getContextPath() + "/admin/updateMemberLevelForm.jsp");
 		return;
 	}
 	
