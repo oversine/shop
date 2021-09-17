@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container">
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
@@ -60,5 +61,6 @@
 	<div>
 		<a class="btn btn-primary" href="<%=request.getContextPath()%>/admin/insertCategoryForm.jsp">카테고리 추가</a>
 	</div>
+</div>	
 </body>
 </html>
