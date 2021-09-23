@@ -60,17 +60,17 @@
 	<table class="table table-striped" style="text-align: center;">
 		<thead>
 			<tr>
-				<th>memberNo</th>
-				<th>memberId</th>
-				<th>memberLevel</th>
-				<th>memberName</th>
-				<th>memberAge</th>
-				<th>memberGender</th>
-				<th>updateDate</th>
-				<th>createDate</th>
-				<th>등급 수정</th>
+				<th>회원 번호</th>
+				<th>ID</th>
+				<th>등급</th>
+				<th>이름</th>
+				<th>나이</th>
+				<th>성별</th>
+				<th>수정일자</th>
+				<th>생성일자</th>
+				<th>등급수정</th>
 				<th>비밀번호 수정</th>
-				<th>회원 탈퇴</th>
+				<th>회원탈퇴</th>
 			</tr>
 		</thead>
 		<tbody>

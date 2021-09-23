@@ -37,8 +37,8 @@
 			<tr>
 				<th>카테고리</th>
 				<th>카테고리 사용 여부</th>
-				<th>updateDate</th>
-				<th>createDate</th>
+				<th>수정일자</th>
+				<th>생성일자</th>
 			</tr>
 		</thead>
 		<tbody>
