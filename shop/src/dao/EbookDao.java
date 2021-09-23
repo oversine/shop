@@ -11,6 +11,70 @@ import vo.Ebook;
 
 public class EbookDao {
 	
+	
+	// 3.1 특정 전자책 데이터 수정 메서드
+	public void updateEbook(Ebook ebook) throws ClassNotFoundException, SQLException {
+		System.out.println(ebook.getEbookImg() + " <-- ebookImg");
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = null;
+		PreparedStatement stmt = null;
+		
+		if (ebook.getEbookImg() == null) {
+			sql = "UPDATE ebook SET ebook_price = ? WHERE ebook_no =?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, ebook.getEbookPrice());
+			stmt.setInt(2, ebook.getEbookNo());
+		} else {
+			sql = "UPDATE ebook SET ebook_price = ?, ebook_img = ? WHERE ebook_no =?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, ebook.getEbookPrice());
+			stmt.setString(2, ebook.getEbookImg());
+			stmt.setInt(3, ebook.getEbookNo());
+		}
+		stmt.executeUpdate();
+		
+		System.out.println(stmt);
+		
+		stmt.close();
+		conn.close();
+	}
+
+	// 3. 특정 전자책 데이터 조회 메서드
+	public Ebook selectEbookOne(int ebookNo) throws ClassNotFoundException, SQLException {
+		Ebook ebook = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT ebook_no ebookNo, ebook_isbn ebookISBN, category_name categoryName, ebook_title ebookTitle, ebook_author ebookAuthor, ebook_company ebookCompany, ebook_page_count ebookPageCount, ebook_price ebookPrice, ebook_img ebookImg, ebook_summary ebookSummary, ebook_state ebookState, create_date createDate, update_date updateDate FROM ebook WHERE ebook_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ebookNo);
+		
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			ebook = new Ebook();
+			ebook.setEbookNo(rs.getInt("ebookNo"));
+			ebook.setEbookISBN(rs.getString("ebookISBN"));
+			ebook.setCategoryName(rs.getString("categoryName"));
+			ebook.setEbookTitle(rs.getString("ebookTitle"));
+			ebook.setEbookAuthor(rs.getString("ebookAuthor"));
+			ebook.setEbookCompany(rs.getString("ebookCompany"));
+			ebook.setEbookPageCount(rs.getInt("ebookPageCount"));
+			ebook.setEbookPrice(rs.getInt("ebookPrice"));
+			ebook.setEbookImg(rs.getString("ebookImg"));
+			ebook.setEbookSummary(rs.getString("ebookSummary"));
+			ebook.setEbookState(rs.getString("ebookState"));
+			ebook.setCreateDate(rs.getString("createDate"));
+			ebook.setUpdateDate(rs.getString("updateDate"));
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return ebook;
+	}
+	
 	// 2. 특정 카테고리 선택시 해당 전자책 리스트 출력 메서드
 	public ArrayList<Ebook> selectEbookListByCategory(String categoryName, int beginRow, int rowPerPage) throws ClassNotFoundException, SQLException{
 		ArrayList<Ebook> list = new ArrayList<>();
