@@ -78,7 +78,7 @@
 	</form>
 	
 	<!-- 전자책 목록 출력 : 카테고리별 출력 -->
-		<table class="table table-striped" style="text-align: center;">
+	<table class="table table-striped" style="text-align: center;">
 		<thead>
 			<tr>
 				<th>전자책 번호</th>
