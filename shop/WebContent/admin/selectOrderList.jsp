@@ -56,7 +56,7 @@
 		</thead>
 		<tbody>
 			<%
-				for(OrderEbookMember oem : list) { // 카테고리 테이블 데이터 최대 개수만큼 반복
+				for(OrderEbookMember oem : list) {
 			%>
 				<tr>
 					<td><%=oem.getOrder().getOrderNo()%></td>

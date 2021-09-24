@@ -8,9 +8,39 @@ import java.util.ArrayList;
 
 import commons.DBUtil;
 import vo.Ebook;
+import vo.Member;
 
 public class EbookDao {
+	// 3.2 책 검색
+	public ArrayList<Ebook> selectEbookListBySearchEbookTitle(int beginRow, int rowPerPage, String EbookTitle) throws ClassNotFoundException, SQLException{
+		ArrayList<Ebook> list = new ArrayList<Ebook>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+EbookTitle+"%");
+		stmt.setInt(2, beginRow);
+	 	stmt.setInt(3, rowPerPage);
+		 	
+	 	// System.out.println(stmt);
+		 	
+	 	ResultSet rs = stmt.executeQuery();
+			
+		while(rs.next()){
+			Ebook e = new Ebook();
+			e.setEbookNo(rs.getInt("ebookNo"));
+			e.setEbookImg(rs.getString("ebookImg"));
+			e.setEbookTitle(rs.getString("ebookTitle"));
+			e.setEbookPrice(rs.getInt("ebookPrice"));
+			list.add(e);
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
 	
+		return list;
+	}	
 	
 	// 3.1 특정 전자책 데이터 수정 메서드
 	public void updateEbook(Ebook ebook) throws ClassNotFoundException, SQLException {

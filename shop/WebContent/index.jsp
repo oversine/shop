@@ -43,6 +43,13 @@
 	%>
 	<!-- 상품 목록 -->
 	<%	
+	// 검색어
+	String ebookTitle = "";
+	if(request.getParameter("ebookTitle") != null) {
+		ebookTitle = request.getParameter("ebookTitle");
+	}
+	// System.out.println(memberId + "<-- 검색어");
+	
 	// 페이지
 	int currentPage = 1;
 	if(request.getParameter("currentPage") != null) {
@@ -59,7 +66,16 @@
 	int endPage = startPage + ROW_PER_PAGE - 1;
 	
 	EbookDao ebookDao = new EbookDao();
-	ArrayList<Ebook> ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
+	ArrayList<Ebook> ebookList = null;
+	
+	
+	if(ebookTitle.equals("") == true) {
+		ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
+	} else {
+		ebookList = ebookDao.selectEbookListBySearchEbookTitle(beginRow, ROW_PER_PAGE, ebookTitle);
+	}
+	
+	
 	%>
 
 	<!-- 전자책 목록 출력 : 카테고리별 출력 -->
@@ -71,7 +87,7 @@
 			%>
 					<td>
 						<div>
-							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/img/<%=e.getEbookImg()%>" width="200" height="200"></a>
+							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/img/<%=e.getEbookImg()%>" width="200" height="200"></a>
 						</div>
 						<div>
 							<%=e.getEbookTitle()%>
@@ -128,6 +144,15 @@
 		<%
 				}
 		%>		
+	</div>
+	
+	<!-- 검색 -->
+	<div style="text-align: center;">
+		<form action="<%=request.getContextPath()%>/index.jsp" method="get">
+			책 검색 :
+			<input type="text" name="ebookTitle">
+			<button type="submit" class="btn btn-primary">검색</button>
+		</form>
 	</div>
 </div>
 </body>
