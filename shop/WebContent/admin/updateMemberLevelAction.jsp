@@ -9,6 +9,11 @@
 		return;
 	}
 	
+	if(request.getParameter("memberLevel").equals("")){
+		response.sendRedirect(request.getContextPath() + "/admin/updateMemberLevelForm.jsp");
+		return;
+	}
+	
 	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 	int memberLevel = Integer.parseInt(request.getParameter("memberLevel"));
 	

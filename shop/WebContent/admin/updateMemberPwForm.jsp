@@ -9,18 +9,7 @@
 		response.sendRedirect(request.getContextPath()+"/index.jsp");
 		return;
 	}
-%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-<%
-	request.setCharacterEncoding("utf-8");
-	
+		
 	if(request.getParameter("memberNo") == null){
 		response.sendRedirect(request.getContextPath() + "/admin/selectMemberList.jsp");
 		return;
@@ -31,6 +20,15 @@
 	MemberDao memberDao = new MemberDao();
 	Member member = memberDao.selectMember(memberNo);
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 비밀번호 수정 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
 <div class="container">
 	<!-- start : submenu include -->
 	<div>
@@ -40,11 +38,11 @@
 	<div class="jumbotron text-center">
 		<h1>비밀번호 변경</h1>
 	</div>
-	<form method="post" action="./updateMemberPwAction.jsp">
+	<form id="updatePwForm" method="post" action="./updateMemberPwAction.jsp">
 		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
 		<label for="newPw">변경하실 비밀번호 : </label>
-			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" name="newPw" >
+			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" id="newPw" name="newPw" >
 		</div>
 		<div class="form-group">
 		<label for="memberId">Id : </label>
@@ -62,8 +60,18 @@
 		<label for="memberGender">성별 : </label>
 			<input type ="text" class="form-control" value="<%=member.getMemberGender()%>" readonly="readonly" >
 		</div>
-		<div><button type="submit" class="btn btn-primary">수정</button></div>
+		<div><button id="btn" type="button" class="btn btn-primary">수정</button></div>
 	</form>
+	
+	<script>
+		$('#btn').click(function(){
+			if($('#newPw').val() == '') {
+				alert('수정하실 비밀번호를 입력하세요');
+				return;
+			}
+			$('#updatePwForm').submit();
+		});
+	</script>
 </div>
 </body>
 </html>

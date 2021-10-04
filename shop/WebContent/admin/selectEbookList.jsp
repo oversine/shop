@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>판매 전자책 리스트</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -46,6 +46,7 @@
 	EbookDao ebookDao = new EbookDao();
 	ArrayList<Ebook> ebookList = null;
 	
+	// 초기, 전체 카테고리 선택 시 전체 리스트 / 카테고리 선택 시 해당 카테고리 리스트
 	if(categoryName.equals("") == true) {
 		ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
 	} else {

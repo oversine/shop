@@ -12,6 +12,8 @@ import vo.Member;
 public class MemberDao {
 	// 5. ID 중복검사 확인
 	public String selectMemberId(String memberIdCheck) throws ClassNotFoundException, SQLException {
+		System.out.println(memberIdCheck + "<-- memberIdCheck");
+		
 		String memberId = null;
 		
 		DBUtil dbUtil = new DBUtil();
@@ -37,6 +39,8 @@ public class MemberDao {
 	
 	// 4. 특정 회원정보 출력
 	public Member selectMember(int memberNo) throws ClassNotFoundException, SQLException {
+		System.out.println(memberNo + "<-- selelctMember.memberNo");
+		
 		Member returnMember = null;
 		
 		DBUtil dbUtil = new DBUtil();
@@ -67,9 +71,8 @@ public class MemberDao {
 	
 	// 3.5 관리자 회원 레벨 수정
 	public void updateMemberLevelByAdmin(Member member) throws ClassNotFoundException, SQLException {
-		// System.out.println(member.getMemberNo() + "<-- levelByAdmin param : memberNo");
-		// System.out.println(member.getMemberLevel() + "<-- levelByAdmin param : memberLevel");
-		
+		System.out.println(member.toString() + "<-- levelByAdmin");
+
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = "UPDATE member SET member_level=?, update_date=NOW() WHERE member_no=?";
@@ -87,8 +90,7 @@ public class MemberDao {
 	
 	// 3.4 관리자 회원 비밀번호 수정
 	public void updateMemberPwByAdimin(Member member) throws ClassNotFoundException, SQLException {
-		// System.out.println(member.getMemberNo() + "<-- pwByAdmin param : memberNo");
-		// System.out.println(member.getMemberPw() + "<-- pwByAdmin param : memberPw");
+		System.out.println(member.toString() + "<-- pwByAdmin");
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -107,7 +109,7 @@ public class MemberDao {
 	
 	// 3.3 관리자 회원 삭제
 	public void deleteMemberByKey(int memberNo) throws ClassNotFoundException, SQLException {
-		// System.out.println(memberNo + "<-- deleteMemberKey param : memberNo");
+		System.out.println(memberNo + "<-- deleteMemberKey.memberNo");
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -161,6 +163,9 @@ public class MemberDao {
 	
 	// 3.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
 	public int selectLastPage(int rowPerPage, String memberId) throws ClassNotFoundException, SQLException {
+		System.out.println(rowPerPage + "<-- MemberDao.selectLastPage");
+		System.out.println(memberId + "<-- MemberDao.selectLastPage");
+		
 		int lastPage = 0;
 		int totalRowCount = 0;
 		
@@ -235,11 +240,7 @@ public class MemberDao {
 	
 	// 2. 회원가입
 	public void insertMember(Member member) throws ClassNotFoundException, SQLException {
-		// System.out.println(member.getMemberId() + "<-- MemberDao.insertMember param : memberId");
-		// System.out.println(member.getMemberPw() + "<-- MemberDao.insertMember param : memberPw");
-		// System.out.println(member.getMemberName() + "<-- MemberDao.insertMember param : memberName");
-		// System.out.println(member.getMemberAge() + "<-- MemberDao.insertMember param : memberAge");
-		// System.out.println(member.getMemberGender() + "<-- MemberDao.insertMember param : memberGender");
+		System.out.println(member.toString() + "<-- MemberDao.insertMember");
 				
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -266,8 +267,8 @@ public class MemberDao {
 	
 	// 1. 회원 로그인
 	public Member login(Member member) throws ClassNotFoundException, SQLException {
-		// System.out.println(member.getMemberId() + "<-- MemberDao.login param : memberId");
-		// System.out.println(member.getMemberPw() + "<-- MemberDao.login param : memberPw");
+		System.out.println(member.toString() + "<-- MemberDao.login");
+		
 		Member returnMember = null;
 				
 		DBUtil dbUtil = new DBUtil();

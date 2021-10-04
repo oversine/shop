@@ -10,6 +10,16 @@
 		return;
 	}
 	
+	if(request.getParameter("ebookNo") == null){
+		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
+		return;
+	}
+	
+	if(request.getParameter("ebookNo").equals("")){
+		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
+		return;
+	}
+	
 	int ebookNo = Integer.parseInt(request.getParameter("ebookNo"));
 	
 	EbookDao ebookDao = new EbookDao();
@@ -19,7 +29,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>전자책 수정 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -29,22 +40,33 @@
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
+	
 	<!-- enctype="multipart/form-data" : 액션으로 글자값이 아닌 기계어 코드를 넘길때 사용 -->
-	<form action="<%=request.getContextPath()%>/admin/updateEbookAction.jsp" method="post" enctype="multipart/form-data">
+	<form id="updateEbookForm" action="<%=request.getContextPath()%>/admin/updateEbookAction.jsp" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="ebookNo" value="<%=ebookNo%>">
 			<div class="form-group">
 				<label for="ebookPirce">가격 : </label>
-					<input type ="text" class="form-control" value="<%=ebook.getEbookPrice()%>" name="ebookPrice">
+					<input type ="text" class="form-control" value="<%=ebook.getEbookPrice()%>" id="ebookPrice" name="ebookPrice">
 			</div>
 			<div class="form-group">
 				<label for="ebookImg">이미지 변경 :</label>
-					<input type="file" class="form-control-file border" name="ebookImg">
+					<input type="file" class="form-control-file border" id="ebookImg" name="ebookImg">
 			</div>
 			<div>
-				<button type ="submit" class="btn btn-primary">수정</button>
-				<button type ="reset" class="btn float-right btn-danger">초기화</button>
+				<button id="btn" type="button" class="btn btn-primary">수정</button>
+				<button type="reset" class="btn float-right btn-danger">초기화</button>
 			</div>
 		</form>
-	</div>
+		
+		<script>
+			$('#btn').click(function(){
+				if($('#ebookPrice').val() == '') {
+					alert('가격을 입력하세요');
+					return;
+				}
+				$('#updateEbookForm').submit();
+			});
+		</script>
+</div>
 </body>
 </html>

@@ -7,7 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>메인 화면</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
@@ -26,7 +27,7 @@
 			<div><a href="<%=request.getContextPath()%>/insertMemberForm.jsp">회원가입</a></div>
 	<%		
 		} else {
-			// 형변환을 사용해 어떤 타입인지 선언필요`
+			// 형변환을 사용해 어떤 타입인지 선언필요
 			Member loginMember = (Member)session.getAttribute("loginMember");
 	%>	
 	<%	
@@ -38,17 +39,17 @@
 	%>
 			<div><%=loginMember.getMemberId()%>님 반갑습니다.</div>
 			<div><a href="<%=request.getContextPath()%>/logout.jsp">로그아웃</a></div>
+			<div><a href="<%=request.getContextPath()%>/.jsp">회원정보</a></div>
+			<div><a href="<%=request.getContextPath()%>/selectOrderListByMember.jsp">내 주문현황</a></div>
 	<%	
 		}
-	%>
-	<!-- 상품 목록 -->
-	<%	
+
 	// 검색어
 	String ebookTitle = "";
 	if(request.getParameter("ebookTitle") != null) {
 		ebookTitle = request.getParameter("ebookTitle");
 	}
-	// System.out.println(memberId + "<-- 검색어");
+	// System.out.println(ebookTitle + "<-- 메인 화면 책 검색 키워드");
 	
 	// 페이지
 	int currentPage = 1;
@@ -57,27 +58,98 @@
 	}
 	// System.out.println(currentPage + "<-- Page");
 	
-	// EbookDao의 조회 메서드를 그대로 사용하기 위한 카테고리 변수 공백값
+	// EbookDao의 조회 메서드를 그대로 사용해 전체 전자책 목록 페이징하기 위한 카테고리 변수 고정 공백값
 	String categoryName = "";
 	
-	final int ROW_PER_PAGE = 20; // 변수 10으로 한번 초기화되면 종료까지 10 유지, 상수 표기법
+	final int ROW_PER_PAGE = 15; // 변수 10으로 한번 초기화되면 종료까지 10 유지, 상수 표기법
 	int beginRow = (currentPage-1) * ROW_PER_PAGE;
 	int startPage = ((currentPage - 1) / ROW_PER_PAGE) * ROW_PER_PAGE + 1; // 1페이지 1, 11 페이지 ((11-1) / 10) * 10 + 1 = 11... 각 시작 번호
-	int endPage = startPage + ROW_PER_PAGE - 1;
+	int endPage = startPage + ROW_PER_PAGE - 6;
 	
 	EbookDao ebookDao = new EbookDao();
+	NoticeDao noticeDao = new NoticeDao();
+	
 	ArrayList<Ebook> ebookList = null;
 	
 	
+	// 인기 목록 5개
+	ArrayList<Ebook> popularEbookList = ebookDao.selectPopularEbookList();
+
+	// 신규책 목록 5개
+	ArrayList<Ebook> newEbookList = ebookDao.selectNewEbookList();
+	
+	// 신규 공지사항 목록 5개
+	ArrayList<Notice> newNoticeList = noticeDao.selectNewNoticeList();
+	
+	
+	// 전자책 검색 결과 키워드 공백인 초기의 경우 전체 리스트, 검색 시도시 해당 키워드 결과 리스트 
 	if(ebookTitle.equals("") == true) {
 		ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
 	} else {
 		ebookList = ebookDao.selectEbookListBySearchEbookTitle(beginRow, ROW_PER_PAGE, ebookTitle);
 	}
-	
-	
 	%>
-
+	<!-- 신규 공지사항 5개 -->
+	<table class="table table-striped" style="text-align: center;">
+		<%
+			for(Notice n : newNoticeList) {
+		%>
+			<tr>
+				<td><%=n.getNoticeNo()%></td>
+				<td><a href="<%=request.getContextPath()%>/selectNoticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>"><%=n.getNoticeTitle()%></a></td>
+				<td><%=n.getUpdateDate()%></td>
+			</tr>
+		<%
+			}
+		%>
+	</table>
+	
+	<h2>신규 상품 목록</h2>
+	<table class="table table-striped" style="text-align: center;">
+		<tr>
+			<%	
+				int a = 0;
+				for(Ebook e : newEbookList) {
+			%>
+					<td>
+						<div>
+							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+						</div>
+						<div><a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><%=e.getEbookTitle()%></a></div>
+						<div>
+							<%=e.getEbookPrice()%>	
+						</div>
+					</td>
+			<%
+				}
+			%>
+		</tr>
+	</table><br>	
+		
+	<h2>인기 상품 목록</h2>
+	<table class="table table-striped" style="text-align: center;">
+		<tr>
+			<%	
+				int b = 0;
+				for(Ebook e : popularEbookList) {
+			%>
+					<td>
+						<div>
+							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+						</div>
+						<div><a href=""><%=e.getEbookTitle()%></a></div>
+						<div>
+							<%=e.getEbookPrice()%>	
+						</div>
+					</td>
+			<%		
+				}
+			%>
+		</tr>
+	</table><br>	
+	
+	
+	<h2>전체 상품 목록</h2>
 	<!-- 전자책 목록 출력 : 카테고리별 출력 -->
 	<table class="table table-striped" style="text-align: center;">
 		<tr>
@@ -87,7 +159,7 @@
 			%>
 					<td>
 						<div>
-							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/img/<%=e.getEbookImg()%>" width="200" height="200"></a>
+							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
 						</div>
 						<div>
 							<%=e.getEbookTitle()%>
@@ -139,20 +211,30 @@
 			
 			if(currentPage < lastPage){ // 현재 페이지가 마지막이 아닌 경우에만 다음과 끝 버튼 출력
 		%>	
-				<a class="btn btn-primary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage+1%>>">다음</a>
+				<a class="btn btn-primary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage+1%>">다음</a>
 				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=lastPage%>">끝으로</a>
 		<%
 				}
 		%>		
-	</div>
+	</div><br>
 	
 	<!-- 검색 -->
 	<div style="text-align: center;">
-		<form action="<%=request.getContextPath()%>/index.jsp" method="get">
+		<form id="mainSearchEbookForm" action="<%=request.getContextPath()%>/index.jsp" method="get">
 			책 검색 :
-			<input type="text" name="ebookTitle">
-			<button type="submit" class="btn btn-primary">검색</button>
+			<input type="text" id="ebookTitle" name="ebookTitle">
+			<button id="btn" type="button" class="btn btn-primary">검색</button>
 		</form>
+		
+		<script>
+			$('#btn').click(function(){
+				if($('#ebookTitle').val() == '') {
+					alert('검색할 책 제목을 입력하세요');
+					return;
+				}
+				$('#mainSearchEbookForm').submit();
+			});
+		</script>
 	</div>
 </div>
 </body>

@@ -47,7 +47,7 @@
 			%>
 				<tr>
 					<td><%=c.getCategoryName()%></td>
-					<!-- 선택한 카테고리명과 현재 상태값 전달-->
+					<!-- 선택한 카테고리명과 현재 상태값 전달해 변경-->
 					<td>
 						<a class="btn btn btn-primary" href="<%=request.getContextPath()%>/admin/updateCategoryStateAction.jsp?categoryName=<%=c.getCategoryName()%>&categoryState=<%=c.getCategoryState()%>"><%=c.getCategoryState()%></a></td>
 					<td><%=c.getUpdateDate()%></td>

@@ -10,7 +10,8 @@
 		response.sendRedirect(request.getContextPath()+"/index.jsp");
 		return;
 	}
-	// 검색어
+	
+	// ID 검색 시 해당 변수값에 검색을 시도한 ID 입력 값 들어옴
 	String memberId = "";
 	if(request.getParameter("memberId") != null) {
 		memberId = request.getParameter("memberId");
@@ -33,6 +34,7 @@
 	MemberDao memberDao = new MemberDao();
 	ArrayList<Member> memberList = null;
 	
+	// 검색을 하지 않은 초기 페이지에서는 전체 회원 리스트, 검색을 행한 경우 해당 키워드를 사용한 쿼리문의 결과 배열
 	if(memberId.equals("") == true) {
 		memberList = memberDao.selectMemberListAllByPage(beginRow, ROW_PER_PAGE);
 	} else {
@@ -46,6 +48,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원 목록</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -150,13 +153,24 @@
 				}
 		%>		
 		</div><br>
+		
 		<!-- memberId로 검색 -->
 		<div style="text-align: center;">
-			<form action="<%=request.getContextPath()%>/admin/selectMemberList.jsp" method="get">
+			<form id="searchMemberIdForm" action="<%=request.getContextPath()%>/admin/selectMemberList.jsp" method="get">
 				ID 검색 :
-				<input type="text" name="memberId">
-				<button type="submit" class="btn btn-primary">검색</button>
+				<input type="text" id="memberId" name="memberId">
+				<button id="btn" type="button" class="btn btn-primary">검색</button>
 			</form>
 		</div>
+		
+		<script>
+			$('#btn').click(function(){
+				if($('#memberId').val() == '') {
+					alert('검색할 ID를 입력하세요');
+					return;
+				}
+				$('#searchMemberIdForm').submit();
+			});
+		</script>
 </body>
 </html>

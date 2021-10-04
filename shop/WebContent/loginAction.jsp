@@ -23,8 +23,7 @@
 		return;
 	} else {
 		System.out.println("성공");
-		System.out.println(returnMember.getMemberId() + "<-- id");
-		System.out.println(returnMember.getMemberLevel() + "<-- level");
+		System.out.println(returnMember.toString() + "<-- memberLogin");
 		
 		// request, session 등의 내부에 이미 만들어져있는 변수를 JSP내장 객체라고 칭함
 		// 나만의 공간에 변수를 생성 (session)

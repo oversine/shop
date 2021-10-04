@@ -8,9 +8,60 @@ import java.util.ArrayList;
 
 import commons.DBUtil;
 import vo.Ebook;
-import vo.Member;
 
 public class EbookDao {
+	// 5. 등록 순 신규 책 조회
+	public ArrayList<Ebook> selectNewEbookList() throws ClassNotFoundException, SQLException {
+		ArrayList<Ebook> list = new ArrayList<>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT t.ebook_no ebookNo, e.ebook_title ebookTitle, e.ebook_img ebookImg, e.ebook_price ebookPrice FROM ebook e INNER JOIN (SELECT * FROM ebook ORDER BY create_date DESC LIMIT 0, 5) t ON e.ebook_no = t.ebook_no";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+	 	
+	 	ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()){
+			Ebook e = new Ebook();
+			e.setEbookNo(rs.getInt("ebookNo"));
+			e.setEbookTitle(rs.getString("ebookTitle"));
+			e.setEbookImg(rs.getString("ebookImg"));
+			e.setEbookPrice(rs.getInt("ebookPrice"));
+			list.add(e);
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+		return list;		
+	}
+	
+	
+	// 4. 판매 수 많은 인기 책 조회
+	public ArrayList<Ebook> selectPopularEbookList() throws ClassNotFoundException, SQLException {
+		ArrayList<Ebook> list = new ArrayList<>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT t.ebook_no ebookNo, e.ebook_title ebookTitle, e.ebook_img ebookImg, e.ebook_price ebookPrice FROM ebook e INNER JOIN (SELECT ebook_no, COUNT(ebook_no) cnt FROM orders GROUP BY ebook_no ORDER BY COUNT(ebook_no) DESC LIMIT 0, 5) t ON e.ebook_no = t.ebook_no";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+	 	
+	 	ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()){
+			Ebook e = new Ebook();
+			e.setEbookNo(rs.getInt("ebookNo"));
+			e.setEbookTitle(rs.getString("ebookTitle"));
+			e.setEbookImg(rs.getString("ebookImg"));
+			e.setEbookPrice(rs.getInt("ebookPrice"));
+			list.add(e);
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+		return list;
+	}
+	
+	
 	// 3.2 책 검색
 	public ArrayList<Ebook> selectEbookListBySearchEbookTitle(int beginRow, int rowPerPage, String EbookTitle) throws ClassNotFoundException, SQLException{
 		ArrayList<Ebook> list = new ArrayList<Ebook>();
@@ -44,13 +95,14 @@ public class EbookDao {
 	
 	// 3.1 특정 전자책 데이터 수정 메서드
 	public void updateEbook(Ebook ebook) throws ClassNotFoundException, SQLException {
-		System.out.println(ebook.getEbookImg() + " <-- ebookImg");
+		System.out.println(ebook.toString() + " <-- updateEbook");
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = null;
 		PreparedStatement stmt = null;
 		
+		// 가격만 수정하기 위해 시도한 경우 / 가격은 기존 입력값 그대로 두거나, 수정 후 이미지 파일 교체하기 위해 시도한 경우
 		if (ebook.getEbookImg() == null) {
 			sql = "UPDATE ebook SET ebook_price = ? WHERE ebook_no =?";
 			stmt = conn.prepareStatement(sql);
@@ -73,6 +125,8 @@ public class EbookDao {
 
 	// 3. 특정 전자책 데이터 조회 메서드
 	public Ebook selectEbookOne(int ebookNo) throws ClassNotFoundException, SQLException {
+		System.out.println(ebookNo + "ebookNo");
+		
 		Ebook ebook = null;
 		
 		DBUtil dbUtil = new DBUtil();
@@ -137,6 +191,9 @@ public class EbookDao {
 	
 	// 1.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
 	public int selectLastPage(int rowPerPage, String categoryName) throws ClassNotFoundException, SQLException {
+		System.out.println(rowPerPage + "<-- EbookDao.selectLastPage");
+		System.out.println(categoryName + "<-- EbookDao.selectLastPage");
+		
 		int lastPage = 0;
 		int totalRowCount = 0;
 		

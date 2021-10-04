@@ -14,13 +14,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>카테고리 추가 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
 	<!-- start : submenu include -->
 	<div>
-		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
+		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
 	<div class="jumbotron text-center">
@@ -34,30 +36,48 @@
 		}
 	%>
 	<!-- 카테고리명 중복여부 확인 폼 -->
-	<form action="<%=request.getContextPath()%>/admin/selectCategoryNameCheckAction.jsp" method="post">
+	<form id="categoryCheckForm" action="<%=request.getContextPath()%>/admin/selectCategoryNameCheckAction.jsp" method="post">
 		<div class="form-group">
 		<label for="categoryName">카테고리 : </label>
-			<input type ="text" class="form-control" placeholder="카테고리를 입력해주세요" name="categoryNameCheck">
+			<input type ="text" class="form-control" placeholder="카테고리를 입력해주세요" id="categoryNameCheck" name="categoryNameCheck">
 		</div>
-		<button type="submit" class="btn btn-primary">중복 검사</button>
+		<button id="btn" type="button" class="btn btn-primary">중복 검사</button>
 	</form><br>
 	
 	<!-- 카테고리 추가 폼 -->
-	<form action ="<%=request.getContextPath()%>/admin/insertCategoryAction.jsp" method ="post">
+	<form id="insertCategoryForm" action ="<%=request.getContextPath()%>/admin/insertCategoryAction.jsp" method ="post">
 		<div class="form-group">
-			<input type ="text" class="form-control" name="categoryName" readonly="readonly" value="<%=categoryNameCheck%>">
+			<input type ="text" class="form-control" id="categoryName" name="categoryName" readonly="readonly" value="<%=categoryNameCheck%>">
 		</div>				
 		<div class="form-group">
 			<label for="categoryState">카테고리 사용여부 : </label>
-			<select class="form-control" name = "categoryState">
+			<select class="form-control" id="categoryState" name = "categoryState">
 				<option value = "Y" selected>Y</option>
 				<option value = "N">N</option>
 			</select>
 		</div>
 		<div>
-			<button type ="submit" class="btn btn-primary">카테고리 추가</button>
+			<button id="btn2" type="button" class="btn btn-primary">카테고리 추가</button>
 		</div>
 	</form>
+	
+	<script>
+		$('#btn').click(function(){
+			if($('#categoryNameCheck').val() == '') {
+				alert('카테고리명을 입력하세요');
+				return;
+			}
+			$('#categoryCheckForm').submit();
+		});
+	
+		$('#btn2').click(function(){
+			if($('#categoryName').val() == '') {
+				alert('카테고리명을 입력하세요');
+				return;
+			}
+			$('#insertCategoryForm').submit();
+		});
+	</script>
 </div>
 </body>
 </html>

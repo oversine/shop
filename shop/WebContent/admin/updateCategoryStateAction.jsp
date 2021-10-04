@@ -10,11 +10,16 @@
 		return;
 	}
 	
+	if(request.getParameter("ebookNo").equals("")){
+		response.sendRedirect(request.getContextPath() + "/admin/selectCategoryList.jsp");
+		return;
+	}
+	
 	String categoryName = request.getParameter("categoryName");
 	String categoryState = request.getParameter("categoryState");
 	
 	
-	// 카테고리 상태 값을 Y로 받은 경우 N으로 변경, Y가 아닌 경우 N이므로 Y로 변경 후 값을 전달해 수정
+	// 카테고리 상태 값을 Y로 받은 경우 N으로 변경, Y가 아닌 경우 N이므로 Y로 변경 후 값을 전달해 수정 후 리스트로 이동
 	if(categoryState.equals("Y") == true) {
 		categoryState = "N";
 	} else {

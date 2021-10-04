@@ -12,8 +12,8 @@ import vo.*;
 public class CategoryDao {
 	// 4. 카테고리 사용 여부 수정
 	public void updateCategoryState(Category category) throws ClassNotFoundException, SQLException {
-		// System.out.println(category.getCategoryName() + "<-- updateCategoryState param : categoryName");
-		// System.out.println(category.getCategoryState() + "<-- updateCategoryState param : categoryState");
+		System.out.println(category.toString() + "<-- updateCategoryState");
+	
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -35,7 +35,7 @@ public class CategoryDao {
 	
 	// 3. 카테고리명 중복체크
 	public String selectCategoryName(String categoryNameCheck) throws ClassNotFoundException, SQLException {
-		// System.out.println(categoryNameCheck + "<-- categoryNameCheck");
+		System.out.println(categoryNameCheck + "<-- categoryNameCheck");
 		
 		String categoryName = null;
 		
@@ -61,8 +61,7 @@ public class CategoryDao {
 	
 	// 2. 카테고리 추가
 	public void insertCategory(Category category) throws ClassNotFoundException, SQLException {
-		// System.out.println(category.getCategoryName() + "<-- insertCategory param : categoryName");
-		// System.out.println(category.getCategoryState() + "<-- insertCategory param : categoryState");
+		System.out.println(category.toString() + "<-- insertCategory");
 				
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();

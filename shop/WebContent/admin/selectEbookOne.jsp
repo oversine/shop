@@ -11,13 +11,23 @@
 		return;
 	}
 	
+	if(request.getParameter("ebookNo") == null){
+		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
+		return;
+	}
+	
+	if(request.getParameter("ebookNo").equals("")){
+		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
+		return;
+	}
+	
 	int ebookNo = Integer.parseInt(request.getParameter("ebookNo"));
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>전자책 상세 페이지</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>

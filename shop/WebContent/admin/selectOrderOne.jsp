@@ -10,13 +10,23 @@
 		return;
 	}
 	
+	if(request.getParameter("orderNo") == null){
+		response.sendRedirect(request.getContextPath() + "/admin/selectOrderList.jsp");
+		return;
+	}
+	
+	if(request.getParameter("orderNo").equals("")){
+		response.sendRedirect(request.getContextPath() + "/admin/selectOrderList.jsp");
+		return;
+	}
+	
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>주문 상세 페이지</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>

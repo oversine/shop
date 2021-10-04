@@ -13,7 +13,8 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
@@ -25,17 +26,30 @@
 	<div class="jumbotron text-center">
 		<h1>로그인</h1>
 	</div>
-	<form method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
+	<form id="loginForm" method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
 		<div class="form-group">
 		<label for="memberId">Id : </label>
-			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" name="memberId" >
+			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" id="memberId" name="memberId" >
 		</div>
 		<div class="form-group">
 		<label for="memberPw">비밀번호 : </label>
-			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" name="memberPw" >
+			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" id="memberPw" name="memberPw" >
 		</div>
-		<div><button type="submit" class="btn btn-primary">로그인</button></div>
+		<div><button id="loginBtn" type="button" class="btn btn-primary">로그인</button></div>
 	</form>
+	
+	<!-- 내가 원하는 조건이 충족했을 때 버튼이 작동하도록 클릭했을 때 submit 처리 -->
+	<script>
+		$('#loginBtn').click(function(){
+			if($('#memberId').val() == '') { // id가 공백
+				alert('Id를 입력하세요');
+			} else if($('#memberPw').val() == '') { // pw가 공백
+				alert('비밀번호를 입력하세요');
+			} else {
+				$('#loginForm').submit();
+			}
+		});
+	</script>
 </div>
 </body>
 </html>

@@ -9,17 +9,6 @@
 		response.sendRedirect(request.getContextPath()+"/index.jsp");
 		return;
 	}
-%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-<%
-	request.setCharacterEncoding("utf-8");
 	
 	if(request.getParameter("memberNo") == null){
 		response.sendRedirect(request.getContextPath() + "/admin/selectMemberList.jsp");
@@ -31,6 +20,15 @@
 	MemberDao memberDao = new MemberDao();
 	Member member = memberDao.selectMember(memberNo);
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 등급 수정 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
 <div class="container">
 	<!-- start : submenu include -->
 	<div>
@@ -40,11 +38,11 @@
 	<div class="jumbotron text-center">
 		<h1>회원 등급 변경</h1>
 	</div>
-	<form method="post" action="./updateMemberLevelAction.jsp">
+	<form id="updateLevelForm" method="post" action="<%=request.getContextPath()%>/admin/updateMemberLevelAction.jsp">
 		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
 			<label for="memberLevel">변경하실 회원 레벨 : </label>
-			<select class="form-control" name = "memberLevel">
+			<select class="form-control" name="memberLevel">
 				<option value = "0">0</option>
 				<option value = "1">1</option>
 			</select>
@@ -65,8 +63,14 @@
 		<label for="memberGender">성별 : </label>
 			<input type ="text" class="form-control" value="<%=member.getMemberGender()%>" readonly="readonly" >
 		</div>					
-		<div><button type="submit" class="btn btn-primary">수정</button></div>
+		<div><button id="btn" type="button" class="btn btn-primary">수정</button></div>
 	</form>
+	
+	<script>
+		$('#btn').click(function(){
+			$('#updateLevelForm').submit();
+		});
+	</script>
 </div>
 </body>
 </html>

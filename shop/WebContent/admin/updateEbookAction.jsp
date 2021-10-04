@@ -6,11 +6,6 @@
 <%	
 	request.setCharacterEncoding("utf-8");		
 
-	Member loginMember = (Member)session.getAttribute("loginMember");
-	if(loginMember == null || loginMember.getMemberLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/index.jsp");
-		return;
-	}
 	MultipartRequest mr = new MultipartRequest(request, "C:/Users/subin/Downloads/git/shop/WebContent/image", 1024*1024*1024, "utf-8", new DefaultFileRenamePolicy());
 	
 	// 문제가 생겨 값이 아예 안들어오거나 공백을 입력받고 넘어온 경우
@@ -35,5 +30,6 @@
 	EbookDao ebookDao = new EbookDao();
 	ebookDao.updateEbook(ebook);
 	
+	// 이미지 or 가격 수정 후 해당 상세 페이지로 이동
 	response.sendRedirect(request.getContextPath() + "/admin/selectEbookOne.jsp?ebookNo=" + ebookNo);
 %>
