@@ -5,7 +5,7 @@
 	request.setCharacterEncoding("UTF-8");
 	
 	// 문의내용 작성 값 공백여부 확인
-	if(request.getParameter("qnaNo") == null || request.getParameter("qnaCategory").equals("") || request.getParameter("qnaTitle") == null || request.getParameter("qnaContent") == null || request.getParameter("qnaSecret") == null){
+	if(request.getParameter("qnaNo") == null || request.getParameter("qnaCategory") == null || request.getParameter("qnaTitle") == null || request.getParameter("qnaContent") == null || request.getParameter("qnaSecret") == null){
 		response.sendRedirect(request.getContextPath()+"/selectQnaList.jsp");
 		// System.out.println("null");
 		return;

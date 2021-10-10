@@ -151,8 +151,7 @@ public class OrderDao {
 		Connection conn = dbUtil.getConnection();
 		
 		// 전체 데이터 개수 조회
-		// inner join을 사용해 생성된 주문 테이블의 총 개수를 체크해야함 쿼리문 수정 필요
-		String sql = "SELECT COUNT(*) FROM orders";
+		String sql = "SELECT COUNT(*) FROM orders o INNER JOIN ebook e INNER JOIN member m ON o.ebook_no = e.ebook_no AND o.member_no = m.member_no";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		

@@ -38,7 +38,7 @@
 	<div class="jumbotron text-center">
 		<h1>비밀번호 변경</h1>
 	</div>
-	<form id="updatePwForm" method="post" action="./updateMemberPwAction.jsp">
+	<form id="updatePwForm" method="post" action="<%=request.getContextPath()%>/updateMemberPwAction.jsp">
 		<input type="hidden" name="memberNo" value="<%=memberNo%>">
 		<div class="form-group">
 		<label for="newPw">변경하실 비밀번호 : </label>

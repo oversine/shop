@@ -11,6 +11,86 @@ import vo.OrderComment;
 
 
 public class OrderCommentDao {
+	// 6. 관리자 회원 후기 삭제 메서드
+	public void deleteOrderComment(int orderNo) throws ClassNotFoundException, SQLException {
+		System.out.println(orderNo + "<-- deleteOrderComment.orderNo");
+
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM order_comment WHERE order_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, orderNo);
+		
+		// System.out.println(stmt);
+		
+		stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	// 5.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
+	public int selectCommentAllLastPage(int rowPerPage) throws ClassNotFoundException, SQLException {
+		System.out.println(rowPerPage + "<-- OrderCommentDao.CommentLastPage");
+		
+		int lastPage = 0;
+		int totalRowCount = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// 전체 데이터 개수 조회
+		String sql = "SELECT COUNT(*) FROM order_comment";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			totalRowCount = rs.getInt("COUNT(*)");
+		}
+		
+		// System.out.println(totalRowCount);
+		
+		lastPage = totalRowCount / rowPerPage;
+		if(totalRowCount % rowPerPage != 0) {
+			lastPage++;
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return lastPage;
+	}
+	
+	// 5. 전체 상품 후기 조회 메서드
+	public ArrayList<OrderComment> selectOrderAllList(int beginRow, int rowPerPage) throws ClassNotFoundException, SQLException {
+		ArrayList<OrderComment> list = new ArrayList<>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT order_no orderNo, ebook_no ebookNo, order_comment_content commentContent, order_score orderScore, update_date updateDate FROM order_comment ORDER BY create_date DESC LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, beginRow);
+	 	stmt.setInt(2, rowPerPage);
+	 	
+	 	ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()){
+			OrderComment oc = new OrderComment();
+			
+			oc.setOrderNo(rs.getInt("orderNo"));
+			oc.setEbookNo(rs.getInt("ebookNo"));
+			oc.setOrderComment(rs.getString("commentContent"));
+			oc.setOrderScore(rs.getInt("orderScore"));
+			oc.setUpdateDate(rs.getString("updateDate"));
+			list.add(oc);
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		return list;
+	}
+	
 	// 4.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
 	public int selectCommentLastPage(int ebookNo, int rowPerPage) throws ClassNotFoundException, SQLException {
 		System.out.println(ebookNo + "<-- OrderCommentDao.CommentLastPage");

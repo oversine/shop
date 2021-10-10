@@ -9,7 +9,64 @@ import java.util.ArrayList;
 import commons.DBUtil;
 import vo.Ebook;
 
-public class EbookDao {
+public class EbookDao {	
+	// 7. 신규 전자책 추가
+	public void insertEbook(Ebook ebook) throws ClassNotFoundException, SQLException {
+		System.out.println(ebook.toString() + "<-- ebookDao.insertEbook");
+				
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "INSERT INTO ebook(ebook_isbn, category_name, ebook_title, ebook_author, ebook_company, ebook_page_count, ebook_price, ebook_img, ebook_summary, ebook_state, create_Date, update_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, ebook.getEbookISBN());
+	 	stmt.setString(2, ebook.getCategoryName());
+	 	stmt.setString(3, ebook.getEbookTitle());
+	 	stmt.setString(4, ebook.getEbookAuthor());
+	 	stmt.setString(5, ebook.getEbookCompany());
+	 	stmt.setInt(6, ebook.getEbookPageCount());
+	 	stmt.setInt(7, ebook.getEbookPrice());
+	 	stmt.setString(8, ebook.getEbookImg());
+	 	stmt.setString(9, ebook.getEbookSummary());
+	 	stmt.setString(10, ebook.getEbookState());
+			 	
+		int row = stmt.executeUpdate();	
+		
+		if(row == 1) {
+			System.out.println("등록 성공");
+		} else {
+			System.out.println("등록 실패");
+		}
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	// 6. 도서 ISBN 번호 중복 확인
+	public String selectEbookIsbn(String isbnCheck) throws ClassNotFoundException, SQLException {
+		System.out.println(isbnCheck + "<-- isbnCheck");
+		
+		String isbn = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT ebook_isbn ebookIsbn FROM ebook WHERE ebook_isbn=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, isbnCheck);
+		
+		// System.out.println(stmt + "<-- selectMemberId.stmt");
+		
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			isbn = rs.getString("ebookIsbn");
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return isbn;
+	}
+	
 	// 5. 등록 순 신규 책 조회
 	public ArrayList<Ebook> selectNewEbookList() throws ClassNotFoundException, SQLException {
 		ArrayList<Ebook> list = new ArrayList<>();
@@ -63,16 +120,29 @@ public class EbookDao {
 	
 	
 	// 3.2 책 검색
-	public ArrayList<Ebook> selectEbookListBySearchEbookTitle(int beginRow, int rowPerPage, String EbookTitle) throws ClassNotFoundException, SQLException{
+	public ArrayList<Ebook> selectEbookListBySearchEbookTitle(String categoryName, int beginRow, int rowPerPage, String EbookTitle) throws ClassNotFoundException, SQLException{
 		ArrayList<Ebook> list = new ArrayList<Ebook>();
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, "%"+EbookTitle+"%");
-		stmt.setInt(2, beginRow);
-	 	stmt.setInt(3, rowPerPage);
+		String sql = null;
+		PreparedStatement stmt = null;
+		if (categoryName.equals("")) {
+			sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+			stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, "%"+EbookTitle+"%");
+			stmt.setInt(2, beginRow);
+		 	stmt.setInt(3, rowPerPage);
+		} else {
+			sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE category_name=? AND ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+			stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, categoryName);
+			stmt.setString(2, "%"+EbookTitle+"%");
+			stmt.setInt(3, beginRow);
+		 	stmt.setInt(4, rowPerPage);
+		}
 		 	
 	 	// System.out.println(stmt);
 		 	
@@ -190,9 +260,10 @@ public class EbookDao {
 	
 	
 	// 1.1 최대 수 값을 받아와 마지막 페이지를 체크하는 메서드
-	public int selectLastPage(int rowPerPage, String categoryName) throws ClassNotFoundException, SQLException {
+	public int selectLastPage(int rowPerPage, String categoryName, String ebookTitle) throws ClassNotFoundException, SQLException {
 		System.out.println(rowPerPage + "<-- EbookDao.selectLastPage");
 		System.out.println(categoryName + "<-- EbookDao.selectLastPage");
+		System.out.println(ebookTitle + "<-- EbookDao.selectLastPage");
 		
 		int lastPage = 0;
 		int totalRowCount = 0;
@@ -204,15 +275,31 @@ public class EbookDao {
 		String sql = null;
 		PreparedStatement stmt = null;
 		
-		if(categoryName.equals("") == true) {
+		// 카테고리, 검색어가 없는 전체 목록 기본 페이징 수 체크
+		if(categoryName.equals("") && ebookTitle.equals("")) {
 			sql = "SELECT COUNT(*) FROM ebook";
 			stmt = conn.prepareStatement(sql);
+			System.out.println("1");
 			// System.out.println(stmt);
-		} else {
+		// 특정 카테고리 미검색 상태 전체 페이징	
+		} else if (ebookTitle.equals("")){
 			sql = "SELECT COUNT(*) FROM ebook WHERE category_name LIKE ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%"+categoryName+"%");
+			System.out.println("2");
 			// System.out.println(stmt);
+		// 전체 판매책 페이지에서 검색을 시도한 경우 해당 페이징 수 체크	
+		} else if (categoryName.equals("")) {
+			sql = "SELECT COUNT(*) FROM ebook WHERE ebook_title LIKE ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%"+ebookTitle+"%");
+			System.out.println("3");
+		} else {
+			sql = "SELECT COUNT(*) FROM ebook WHERE category_name = ? AND ebook_title LIKE ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, categoryName);
+			stmt.setString(2, "%"+ebookTitle+"%");
+			System.out.println("4");
 		}
 		
 		ResultSet rs = stmt.executeQuery();

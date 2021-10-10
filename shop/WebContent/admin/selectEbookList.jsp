@@ -20,8 +20,12 @@
 		return;
 	}
 	
+	// EbookDao의 조회 메서드를 그대로 사용해 전체 전자책 목록 페이징하기 위한 변수 고정 공백값
+	String ebookTitle = "";
+	
 	// 카테고리 선택 시 페이지로 다시 넘어오게 될 변수값
 	String categoryName = "";
+
 	if(request.getParameter("categoryName") != null) {
 		categoryName = request.getParameter("categoryName");
 	}
@@ -67,7 +71,8 @@
 	<!-- 카테고리 목록에서 특정 카테고리 선택시 onchange="this.form.submit()" 를 통해 선택 직후 submit 처리되어 카테고리 값이 해당 페이지로 전달됨 -->
 	<form action="<%=request.getContextPath()%>/admin/selectEbookList.jsp">
 		<select name="categoryName" class="custom-select" onchange="this.form.submit()">
-			<option value="">전체목록</option>
+		<option value="" style="display:none">카테고리 목록</option>
+		<option value="">전체목록</option>
 			<%
 				for(Category c : categoryList) {
 			%>
@@ -95,14 +100,19 @@
 				<tr>
 					<td><%=e.getEbookNo()%></td>
 					<td><%=e.getCategoryName()%></td>
-					<td><a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><%=e.getEbookTitle()%></a></td>
+					<td>
+						<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><%=e.getEbookTitle()%></a>
+					</td>
 					<td><%=e.getEbookState()%></td>
 				</tr>
 			<%
 				}
 			%>
 		</tbody>
-	</table><br>
+	</table>
+	<div>
+		<a class="btn btn-primary" href="<%=request.getContextPath()%>/admin/insertEbookForm.jsp">판매 전자책 추가</a>
+	</div><br>
 	
 	<!-- 페이징 번호 -->
 	<div style="text-align: center;">
@@ -113,7 +123,7 @@
 				<a class="btn btn-success" href="<%=request.getContextPath()%>/admin/selectEbookList.jsp?currentPage=<%=currentPage-1%>&categoryName=<%=categoryName%>">이전</a>
 		<%
 			}
-			int lastPage = ebookDao.selectLastPage(ROW_PER_PAGE, categoryName);
+			int lastPage = ebookDao.selectLastPage(ROW_PER_PAGE, categoryName, ebookTitle);
 			
 			if (endPage > lastPage) { // 총 열 1001로 101페이지 번호가 끝인데 endPage는 110까지 잡혀있는 경우 등, 실제 마지막 번호로 번호 나열을 마치기 위한 조건문 
 				endPage = lastPage;

@@ -10,6 +10,71 @@ import commons.DBUtil;
 import vo.Member;
 
 public class MemberDao {
+	
+	// 6. 회원 정보 수정
+	public void updateMember(Member member) throws ClassNotFoundException, SQLException {
+		System.out.println(member.toString() + "<-- pwByAdmin");
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = null;
+		PreparedStatement stmt = null;
+		
+		// 비밀번호를 제외한 나머지 정보를 수정하는 경우
+		if(member.getMemberPw().equals("")) {
+			sql = "UPDATE member SET member_name=?, member_age=?, member_gender=?, update_date=NOW() WHERE member_no=?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, member.getMemberName());
+			stmt.setInt(2, member.getMemberAge());
+			stmt.setString(3, member.getMemberGender());
+			stmt.setInt(4, member.getMemberNo());
+		// 비밀번호 또는 비밀번호와 함께 나머지 정보를 수정하는 경우	
+		} else {
+			sql = "UPDATE member SET member_pw=PASSWORD(?), member_name=?, member_age=?, member_gender=?, update_date=NOW() WHERE member_no=?";
+			stmt = conn.prepareStatement(sql);	
+			stmt.setString(1, member.getMemberPw());
+			stmt.setString(2, member.getMemberName());
+			stmt.setInt(3, member.getMemberAge());
+			stmt.setString(4, member.getMemberGender());
+			stmt.setInt(5, member.getMemberNo());
+		}
+		
+		/// System.out.println(stmt);
+		
+		stmt.executeQuery();
+		
+		stmt.close();
+		conn.close();
+	}
+	
+	// 5. 회원 비밀번호 일치여부 확인
+	public int selectMemberPw(int memberNo, String memberPwCheck) throws ClassNotFoundException, SQLException {
+		System.out.println(memberPwCheck + "<-- memberPwCheck");
+		System.out.println(memberNo + "<-- memberNo");
+		
+		int check = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT member_pw memberPw FROM member WHERE member_no=? AND member_pw=PASSWORD(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, memberNo);
+		stmt.setString(2, memberPwCheck);
+		
+		// System.out.println(stmt + "<-- selectMemberId.stmt");
+		
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			check = 1;
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return check;
+	}
+	
 	// 5. ID 중복검사 확인
 	public String selectMemberId(String memberIdCheck) throws ClassNotFoundException, SQLException {
 		System.out.println(memberIdCheck + "<-- memberIdCheck");

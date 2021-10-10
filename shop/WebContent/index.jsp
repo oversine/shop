@@ -39,8 +39,8 @@
 	%>
 			<div><%=loginMember.getMemberId()%>님 반갑습니다.</div>
 			<div><a href="<%=request.getContextPath()%>/logout.jsp">로그아웃</a></div>
-			<div><a href="<%=request.getContextPath()%>/.jsp">회원정보</a></div>
 			<div><a href="<%=request.getContextPath()%>/selectOrderListByMember.jsp">내 주문현황</a></div>
+			<div><a href="<%=request.getContextPath()%>/selectMemberOne.jsp?memberNo=<%=loginMember.getMemberNo()%>">회원정보 수정</a></div>
 	<%	
 		}
 
@@ -86,7 +86,7 @@
 	if(ebookTitle.equals("") == true) {
 		ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
 	} else {
-		ebookList = ebookDao.selectEbookListBySearchEbookTitle(beginRow, ROW_PER_PAGE, ebookTitle);
+		ebookList = ebookDao.selectEbookListBySearchEbookTitle(categoryName, beginRow, ROW_PER_PAGE, ebookTitle);
 	}
 	%>
 	<!-- 신규 공지사항 5개 -->
@@ -135,7 +135,7 @@
 			%>
 					<td>
 						<div>
-							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
 						</div>
 						<div><a href=""><%=e.getEbookTitle()%></a></div>
 						<div>
@@ -150,7 +150,7 @@
 	
 	
 	<h2>전체 상품 목록</h2>
-	<!-- 전자책 목록 출력 : 카테고리별 출력 -->
+	<!-- 전자책 목록 출력 -->
 	<table class="table table-striped" style="text-align: center;">
 		<tr>
 			<%	
@@ -159,7 +159,7 @@
 			%>
 					<td>
 						<div>
-							<a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
 						</div>
 						<div>
 							<%=e.getEbookTitle()%>
@@ -186,11 +186,11 @@
 		<%	
 			if(currentPage > 1){
 		%>	
-				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=1">처음으로</a>
-				<a class="btn btn-success" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage-1%>">이전</a>
+				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=1&ebookTitle=<%=ebookTitle%>">처음으로</a>
+				<a class="btn btn-success" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage-1%>&ebookTitle=<%=ebookTitle%>">이전</a>
 		<%
 			}
-			int lastPage = ebookDao.selectLastPage(ROW_PER_PAGE, categoryName);
+			int lastPage = ebookDao.selectLastPage(ROW_PER_PAGE, categoryName, ebookTitle);
 			
 			if (endPage > lastPage) { // 총 열 1001로 101페이지 번호가 끝인데 endPage는 110까지 잡혀있는 경우 등, 실제 마지막 번호로 번호 나열을 마치기 위한 조건문 
 				endPage = lastPage;
@@ -199,11 +199,11 @@
 			for (int j = startPage; j <= endPage; j++) { // 각 페이지 시작번호 부터 끝번호 까지 반복해 나열
 				if(currentPage == j) { // 현재 페이지 번호만을 다르게 표시해 체크함
 		%>
-					<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=j%>"><%=j%></a>
+					<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=j%>&ebookTitle=<%=ebookTitle%>"><%=j%></a>
 		<%
 				} else {
 		%>
-					<a class="btn btn-outline-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=j%>"><%=j%></a>	
+					<a class="btn btn-outline-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=j%>&ebookTitle=<%=ebookTitle%>"><%=j%></a>	
 		<%		
 				}
 			}
@@ -211,8 +211,8 @@
 			
 			if(currentPage < lastPage){ // 현재 페이지가 마지막이 아닌 경우에만 다음과 끝 버튼 출력
 		%>	
-				<a class="btn btn-primary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage+1%>">다음</a>
-				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=lastPage%>">끝으로</a>
+				<a class="btn btn-primary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=currentPage+1%>&ebookTitle=<%=ebookTitle%>">다음</a>
+				<a class="btn btn-secondary" href="<%=request.getContextPath()%>/index.jsp?currentPage=<%=lastPage%>&ebookTitle=<%=ebookTitle%>">끝으로</a>
 		<%
 				}
 		%>		

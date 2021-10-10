@@ -10,6 +10,69 @@ import commons.DBUtil;
 import vo.*;
 
 public class QnaDao {
+	// 7.1 관리자 Qna 답변 리스트 마지막 페이지 체크
+	public int selectWaitQnaLastPage(int rowPerPage) throws ClassNotFoundException, SQLException {
+		System.out.println(rowPerPage + "<-- QnaDao.selectWaitQnaLastPage");
+		
+		int lastPage = 0;
+		int totalRowCount = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// 전체 데이터 개수 조회
+		String sql = "SELECT COUNT(*) FROM qna q LEFT JOIN qna_comment qc ON q.qna_no = qc.qna_no WHERE qc.qna_no IS NULL";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			totalRowCount = rs.getInt("COUNT(*)");
+		}
+		
+		// System.out.println(totalRowCount);
+		
+		lastPage = totalRowCount / rowPerPage;
+		if(totalRowCount % rowPerPage != 0) {
+			lastPage++;
+		}
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return lastPage;
+	}
+	
+	// 7. 관리자 답글 달리지 않은 답변 조회
+	public ArrayList<Qna> waitQna(int beginRow, int rowPerPage) throws ClassNotFoundException, SQLException {
+		ArrayList<Qna> list = new ArrayList<>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT q.qna_no qnaNo, q.qna_category qnaCategory, q.qna_title qnaTitle, q.qna_secret qnaSecret, q.member_no memberNo, q.member_id memberId, q.update_date updateDate FROM qna q LEFT JOIN qna_comment qc ON q.qna_no = qc.qna_no WHERE qc.qna_no IS NULL ORDER BY q.create_date ASC LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, beginRow);
+		stmt.setInt(2, rowPerPage);
+		
+	 	ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()){
+			Qna q = new Qna();
+			q.setQnaNo(rs.getInt("qnaNo"));
+			q.setQnaCategory(rs.getString("qnaCategory"));
+			q.setQnaTitle(rs.getString("qnaTitle"));
+			q.setQnaSecret(rs.getString("qnaSecret"));
+			q.setMemberNo(rs.getInt("memberNo"));
+			q.setMemberId(rs.getString("memberId"));
+			q.setUpdateDate(rs.getString("updateDate"));
+			list.add(q);
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		return list;		
+	}
+	
 	// 6. 관리자, 회원 문의글 수정 메서드
 	public void updateQna(Qna qna) throws ClassNotFoundException, SQLException {
 		System.out.println(qna.toString() + " <-- updateQna");
