@@ -27,6 +27,10 @@
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
@@ -84,11 +88,15 @@
 				<!-- 주문 입력 폼, 비로그인, 로그인 여부 구분 -->
 				<%
 					Member loginMember = (Member)session.getAttribute("loginMember");
-					if(loginMember == null) {
+					if (ebook.getEbookState().equals("품절") || ebook.getEbookState().equals("절판") || ebook.getEbookState().equals("구편절판")) {
+				%>
+						<div>현재 책을 구매하실 수 없습니다.</div>
+				<%		
+					} else if(loginMember == null) {
 				%>		
 						<div>
 							로그인 후에 주문이 가능합니다. 
-							<a href="<%=request.getContextPath()%>/loginForm.jsp">로그인</a>
+							<a class="btn btn-primary" href="<%=request.getContextPath()%>/loginForm.jsp">로그인</a>
 						</div>	
 				<%		
 					} else {

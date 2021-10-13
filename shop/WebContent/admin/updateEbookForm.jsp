@@ -10,12 +10,7 @@
 		return;
 	}
 	
-	if(request.getParameter("ebookNo") == null){
-		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
-		return;
-	}
-	
-	if(request.getParameter("ebookNo").equals("")){
+	if(request.getParameter("ebookNo") == null || request.getParameter("ebookNo").equals("")){
 		response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
 		return;
 	}
@@ -35,6 +30,10 @@
 </head>
 <body>
 	<div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+	
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
@@ -44,6 +43,7 @@
 	<!-- enctype="multipart/form-data" : 액션으로 글자값이 아닌 기계어 코드를 넘길때 사용 -->
 	<form id="updateEbookForm" action="<%=request.getContextPath()%>/admin/updateEbookAction.jsp" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="ebookNo" value="<%=ebookNo%>">
+		<input type="hidden" name="deleteEbookImg" value="<%=ebook.getEbookImg()%>">
 			<div class="form-group">
 				<label for="ebookPirce">가격 : </label>
 					<input type ="text" class="form-control" value="<%=ebook.getEbookPrice()%>" id="ebookPrice" name="ebookPrice">

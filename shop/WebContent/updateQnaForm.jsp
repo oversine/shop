@@ -36,6 +36,10 @@
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>

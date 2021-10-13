@@ -49,10 +49,15 @@
 <head>
 <meta charset="UTF-8">
 <title>책 판매 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
@@ -63,9 +68,11 @@
 	<ul class="list-group list-group-horizontal">
 	<% 
 		for(Category c : categoryList) {
+			if(c.getCategoryState().equals("Y")) {
 	%>
 		<li class="list-group-item list-group-item-action list-group-item-secondary"><a href="<%=request.getContextPath()%>/selectEbookList.jsp?categoryName=<%=c.getCategoryName()%>"><%=c.getCategoryName()%></a></li>
 	<% 
+			}
 		}
 	%>
 	</ul>

@@ -10,6 +10,27 @@ import commons.DBUtil;
 import vo.Ebook;
 
 public class EbookDao {	
+	// 8. 카테고리 사용여부 변경시 전자책 DB 수정
+	public void updateEbookCategoryState(Ebook ebook) throws ClassNotFoundException, SQLException {
+		System.out.println(ebook.toString() + "<-- updateEbookCategoryState");
+
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// 들어온 상태 값으로 카테고리명 행에 해당하는 상태값, 변경일 수정
+		String sql = "UPDATE ebook SET category_state=?, update_date=NOW() WHERE category_name=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, ebook.getCategoryState());
+		stmt.setString(2, ebook.getCategoryName());
+		
+		// System.out.println(stmt);
+		
+		stmt.executeQuery();
+		
+		stmt.close();
+		conn.close();
+	}	
+	
 	// 7. 신규 전자책 추가
 	public void insertEbook(Ebook ebook) throws ClassNotFoundException, SQLException {
 		System.out.println(ebook.toString() + "<-- ebookDao.insertEbook");
@@ -73,8 +94,9 @@ public class EbookDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT t.ebook_no ebookNo, e.ebook_title ebookTitle, e.ebook_img ebookImg, e.ebook_price ebookPrice FROM ebook e INNER JOIN (SELECT * FROM ebook ORDER BY create_date DESC LIMIT 0, 5) t ON e.ebook_no = t.ebook_no";
+		String sql = "SELECT ebook_no ebookNo, ebook_title ebookTitle, ebook_img ebookImg, ebook_price ebookPrice, category_state categoryState FROM ebook WHERE category_state=? ORDER BY create_date DESC LIMIT 0, 5";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "Y");
 	 	
 	 	ResultSet rs = stmt.executeQuery();
 		
@@ -84,6 +106,7 @@ public class EbookDao {
 			e.setEbookTitle(rs.getString("ebookTitle"));
 			e.setEbookImg(rs.getString("ebookImg"));
 			e.setEbookPrice(rs.getInt("ebookPrice"));
+			e.setCategoryState(rs.getString("categoryState"));
 			list.add(e);
 		}
 		rs.close();
@@ -99,7 +122,7 @@ public class EbookDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT t.ebook_no ebookNo, e.ebook_title ebookTitle, e.ebook_img ebookImg, e.ebook_price ebookPrice FROM ebook e INNER JOIN (SELECT ebook_no, COUNT(ebook_no) cnt FROM orders GROUP BY ebook_no ORDER BY COUNT(ebook_no) DESC LIMIT 0, 5) t ON e.ebook_no = t.ebook_no";
+		String sql = "SELECT t.ebook_no ebookNo, e.ebook_title ebookTitle, e.ebook_img ebookImg, e.ebook_price ebookPrice, e.category_state categoryState FROM ebook e INNER JOIN (SELECT ebook_no, COUNT(ebook_no) cnt FROM orders GROUP BY ebook_no ORDER BY COUNT(ebook_no) DESC LIMIT 0, 5) t ON e.ebook_no = t.ebook_no";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 	 	
 	 	ResultSet rs = stmt.executeQuery();
@@ -110,6 +133,7 @@ public class EbookDao {
 			e.setEbookTitle(rs.getString("ebookTitle"));
 			e.setEbookImg(rs.getString("ebookImg"));
 			e.setEbookPrice(rs.getInt("ebookPrice"));
+			e.setCategoryState(rs.getString("categoryState"));
 			list.add(e);
 		}
 		rs.close();
@@ -128,20 +152,22 @@ public class EbookDao {
 		String sql = null;
 		PreparedStatement stmt = null;
 		if (categoryName.equals("")) {
-			sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+			sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice, category_state categoryState FROM ebook WHERE category_state =? AND ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			
-			stmt.setString(1, "%"+EbookTitle+"%");
-			stmt.setInt(2, beginRow);
-		 	stmt.setInt(3, rowPerPage);
-		} else {
-			sql = "SELECT ebook_no ebookNO, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice FROM ebook WHERE category_name=? AND ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
-			stmt = conn.prepareStatement(sql);
-			
-			stmt.setString(1, categoryName);
+			stmt.setString(1, "Y");
 			stmt.setString(2, "%"+EbookTitle+"%");
 			stmt.setInt(3, beginRow);
 		 	stmt.setInt(4, rowPerPage);
+		} else {
+			sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_img ebookImg, ebook_title ebookTitle, ebook_price ebookPrice, category_state categoryState FROM ebook WHERE category_name=? AND category_state=? AND ebook_title LIKE ? ORDER BY create_date DESC LIMIT ?, ?";
+			stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, categoryName);
+			stmt.setString(2, "Y");
+			stmt.setString(3, "%"+EbookTitle+"%");
+			stmt.setInt(4, beginRow);
+		 	stmt.setInt(5, rowPerPage);
 		}
 		 	
 	 	// System.out.println(stmt);
@@ -151,6 +177,7 @@ public class EbookDao {
 		while(rs.next()){
 			Ebook e = new Ebook();
 			e.setEbookNo(rs.getInt("ebookNo"));
+			e.setCategoryState(rs.getString("categoryName"));
 			e.setEbookImg(rs.getString("ebookImg"));
 			e.setEbookTitle(rs.getString("ebookTitle"));
 			e.setEbookPrice(rs.getInt("ebookPrice"));
@@ -174,12 +201,12 @@ public class EbookDao {
 		
 		// 가격만 수정하기 위해 시도한 경우 / 가격은 기존 입력값 그대로 두거나, 수정 후 이미지 파일 교체하기 위해 시도한 경우
 		if (ebook.getEbookImg() == null) {
-			sql = "UPDATE ebook SET ebook_price = ? WHERE ebook_no =?";
+			sql = "UPDATE ebook SET ebook_price = ?, update_date=NOW() WHERE ebook_no =?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, ebook.getEbookPrice());
 			stmt.setInt(2, ebook.getEbookNo());
 		} else {
-			sql = "UPDATE ebook SET ebook_price = ?, ebook_img = ? WHERE ebook_no =?";
+			sql = "UPDATE ebook SET ebook_price = ?, ebook_img = ?, update_date=NOW() WHERE ebook_no =?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, ebook.getEbookPrice());
 			stmt.setString(2, ebook.getEbookImg());
@@ -235,11 +262,12 @@ public class EbookDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_state ebookState FROM ebook WHERE category_name=? ORDER BY create_date DESC LIMIT ?, ?";
+		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_state ebookState FROM ebook WHERE category_name=? AND category_state=? ORDER BY create_date DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, categoryName);
-		stmt.setInt(2, beginRow);
-	 	stmt.setInt(3, rowPerPage);
+		stmt.setString(2, "Y");
+		stmt.setInt(3, beginRow);
+	 	stmt.setInt(4, rowPerPage);
 	 	
 	 	ResultSet rs = stmt.executeQuery();
 		
@@ -277,28 +305,29 @@ public class EbookDao {
 		
 		// 카테고리, 검색어가 없는 전체 목록 기본 페이징 수 체크
 		if(categoryName.equals("") && ebookTitle.equals("")) {
-			sql = "SELECT COUNT(*) FROM ebook";
+			sql = "SELECT COUNT(*) FROM ebook WHERE category_state=?";
 			stmt = conn.prepareStatement(sql);
-			System.out.println("1");
+			stmt.setString(1, "Y");
 			// System.out.println(stmt);
 		// 특정 카테고리 미검색 상태 전체 페이징	
 		} else if (ebookTitle.equals("")){
-			sql = "SELECT COUNT(*) FROM ebook WHERE category_name LIKE ?";
+			sql = "SELECT COUNT(*) FROM ebook WHERE category_state=? AND category_name LIKE ?";
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, "%"+categoryName+"%");
-			System.out.println("2");
+			stmt.setString(1, "Y");
+			stmt.setString(2, "%"+categoryName+"%");
 			// System.out.println(stmt);
 		// 전체 판매책 페이지에서 검색을 시도한 경우 해당 페이징 수 체크	
 		} else if (categoryName.equals("")) {
-			sql = "SELECT COUNT(*) FROM ebook WHERE ebook_title LIKE ?";
+			sql = "SELECT COUNT(*) FROM ebook WHERE category_state=? AND ebook_title LIKE ?";
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, "%"+ebookTitle+"%");
-			System.out.println("3");
+			stmt.setString(1, "Y");
+			stmt.setString(2, "%"+ebookTitle+"%");
 		} else {
-			sql = "SELECT COUNT(*) FROM ebook WHERE category_name = ? AND ebook_title LIKE ?";
+			sql = "SELECT COUNT(*) FROM ebook WHERE category_name = ? AND category_name=? AND ebook_title LIKE ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, categoryName);
-			stmt.setString(2, "%"+ebookTitle+"%");
+			stmt.setString(2, "Y");
+			stmt.setString(3, "%"+ebookTitle+"%");
 			System.out.println("4");
 		}
 		
@@ -327,10 +356,11 @@ public class EbookDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_img ebookImg, ebook_price ebookPrice, ebook_state ebookState FROM ebook ORDER BY create_date DESC LIMIT ?, ?";
+		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_img ebookImg, ebook_price ebookPrice, ebook_state ebookState, category_state categoryState FROM ebook WHERE category_state = ? ORDER BY create_date DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, beginRow);
-	 	stmt.setInt(2, rowPerPage);
+		stmt.setString(1, "Y");
+		stmt.setInt(2, beginRow);
+	 	stmt.setInt(3, rowPerPage);
 	 	
 	 	ResultSet rs = stmt.executeQuery();
 		
@@ -342,6 +372,7 @@ public class EbookDao {
 			e.setEbookImg(rs.getString("ebookImg"));
 			e.setEbookPrice(rs.getInt("ebookPrice"));
 			e.setEbookState(rs.getString("ebookState"));
+			e.setCategoryState(rs.getString("categoryState"));
 			list.add(e);
 		}
 		rs.close();

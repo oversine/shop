@@ -37,16 +37,16 @@
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
-	</div>
-	<!-- end : submenu include -->
-	<h1>관리자 페이지</h1>
-	<div><%=loginMember.getMemberId()%>님 반갑습니다.</div>
-	<div><a href="<%=request.getContextPath()%>/admin/insertNoticeForm.jsp">공지사항 작성</a></div>
-	<div><a href="<%=request.getContextPath()%>/index.jsp">메인으로 이동</a></div>
+	</div><br>
 	
+	<!-- end : submenu include -->
+	<h2>신규 공지사항</h2>
 	<table class="table table-striped" style="text-align: center;">
 		<%
 			for(Notice n : newNoticeList) {
@@ -59,7 +59,8 @@
 		<%
 			}
 		%>
-	</table>
+	</table><br>
+	
 	<h2>문의 미답변 리스트</h2>
 	<!-- 답변을 작성하지 않은 QNA 리스트 -->
 		<table class="table table-striped" style="text-align: center;">

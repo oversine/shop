@@ -12,38 +12,20 @@
 </head>
 <body>
 <div class="container">
+
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
 	<div class="jumbotron text-center">
-	<h1>메인페이지</h1>
+		<h1>신규 공지사항</h1>
 	</div>
-	<% 
-		if(session.getAttribute("loginMember") == null){
-	%>
-			<div><a href="<%=request.getContextPath()%>/loginForm.jsp">로그인</a></div>
-			<div><a href="<%=request.getContextPath()%>/insertMemberForm.jsp">회원가입</a></div>
-	<%		
-		} else {
-			// 형변환을 사용해 어떤 타입인지 선언필요
-			Member loginMember = (Member)session.getAttribute("loginMember");
-	%>	
 	<%	
-			if(loginMember.getMemberLevel() > 0) {
-	%>
-				<div><a href="<%=request.getContextPath()%>/admin/adminIndex.jsp">관리자 페이지</a></div>
-	<%			
-			}
-	%>
-			<div><%=loginMember.getMemberId()%>님 반갑습니다.</div>
-			<div><a href="<%=request.getContextPath()%>/logout.jsp">로그아웃</a></div>
-			<div><a href="<%=request.getContextPath()%>/selectOrderListByMember.jsp">내 주문현황</a></div>
-			<div><a href="<%=request.getContextPath()%>/selectMemberOne.jsp?memberNo=<%=loginMember.getMemberNo()%>">회원정보 수정</a></div>
-	<%	
-		}
-
 	// 검색어
 	String ebookTitle = "";
 	if(request.getParameter("ebookTitle") != null) {
@@ -102,7 +84,7 @@
 		<%
 			}
 		%>
-	</table>
+	</table><br>
 	
 	<h2>신규 상품 목록</h2>
 	<table class="table table-striped" style="text-align: center;">
@@ -171,9 +153,9 @@
 			<%		
 					// 한 전자책을 불러오고 1을 증가시키며 반복하다 5개를 불러온 경우 <tr></tr>을 통해 상품의 줄바꿈처리를 해 5개씩 가로 배열
 					i+=1;
-					if(i%5 == 0) {
+						if(i%5 == 0) {
 			%>
-						</tr><tr>
+							</tr><tr>
 			<%
 					}
 				}

@@ -5,6 +5,8 @@
 <%	
 	request.setCharacterEncoding("utf-8");		
 	
+	Member loginMember = (Member)session.getAttribute("loginMember");
+
 	// 페이지
 	int currentPage = 1;
 	if(request.getParameter("currentPage") != null) {
@@ -29,6 +31,18 @@
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+<% 
+	if(loginMember != null && loginMember.getMemberLevel() > 0) {
+%>
+	<div>
+		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
+	</div>
+<% 
+	}
+%>
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
@@ -57,7 +71,6 @@
 					<td><%=qna.getQnaCategory()%></td>
 			<% 
 					// 비밀글, 비밀글 체크를 안한 경우 출력, 비회원은 비밀글 조회 불가, 작성한 회원과 관리자는 비밀글 조회 가능, 다른 회원 비밀글 조회 불가
-					Member loginMember = (Member)session.getAttribute("loginMember");
 					if(qna.getQnaSecret().equals("N")) {
 			%>
 					<td><a href="<%=request.getContextPath()%>/selectQnaOne.jsp?qnaNo=<%=qna.getQnaNo()%>"><%=qna.getQnaTitle()%></a></td>
@@ -86,7 +99,6 @@
 	</table>
 	<% 	
 		// 로그인 한 회원만 문의글 작성 가능
-		Member loginMember = (Member)session.getAttribute("loginMember");
 		if(loginMember != null && loginMember.getMemberLevel() < 1) {
 	%>		
 			<div>

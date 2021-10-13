@@ -10,6 +10,28 @@ import commons.DBUtil;
 import vo.*;
 
 public class CategoryDao {
+	// 6. 특정 카테고리 전자책 판매 페이지 진입을 위한 판매 중인 카테고리명 조회 
+	public String selectCategory() throws ClassNotFoundException, SQLException {
+		String categoryName = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT category_name categoryName, category_state categoryState FROM category WHERE category_state=? LIMIT 0,1";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "Y");
+
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			categoryName = rs.getString("categoryName");
+		}
+		
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		return categoryName;
+	}	
+	
 	// 4. 카테고리 사용 여부 수정
 	public void updateCategoryState(Category category) throws ClassNotFoundException, SQLException {
 		System.out.println(category.toString() + "<-- updateCategoryState");

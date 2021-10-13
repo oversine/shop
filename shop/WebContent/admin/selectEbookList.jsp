@@ -51,13 +51,17 @@
 	ArrayList<Ebook> ebookList = null;
 	
 	// 초기, 전체 카테고리 선택 시 전체 리스트 / 카테고리 선택 시 해당 카테고리 리스트
-	if(categoryName.equals("") == true) {
+	if(categoryName.equals("")) {
 		ebookList = ebookDao.selectEbookList(beginRow, ROW_PER_PAGE);
 	} else {
 		ebookList = ebookDao.selectEbookListByCategory(categoryName, beginRow, ROW_PER_PAGE);
 		// System.out.println(ebookList);
 	}
 %>
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+	
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
@@ -75,9 +79,11 @@
 		<option value="">전체목록</option>
 			<%
 				for(Category c : categoryList) {
+					if(c.getCategoryState().equals("Y")) {
 			%>
 					<option value="<%=c.getCategoryName()%>"><%=c.getCategoryName()%></option>
-			<%		
+			<%	
+					}
 				}
 			%>
 		</select>

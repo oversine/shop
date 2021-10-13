@@ -5,6 +5,8 @@
 <%	
 	request.setCharacterEncoding("utf-8");		
 	
+	Member loginMember = (Member)session.getAttribute("loginMember");
+
 	// 페이지
 	int currentPage = 1;
 	if(request.getParameter("currentPage") != null) {
@@ -29,6 +31,18 @@
 </head>
 <body>
 <div class="container">
+	<div>
+		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
+	</div>
+<% 
+	if(loginMember != null && loginMember.getMemberLevel() > 0) {
+%>
+	<div>
+		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
+	</div>
+<% 
+	}
+%>
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>

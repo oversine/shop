@@ -12,6 +12,7 @@ public class Ebook {
 	   public String ebookImg;
 	   public String ebookSummary;
 	   public String ebookState;
+	   public String categoryState;
 	   public String createDate;
 	   public String updateDate;
 	   
@@ -80,6 +81,12 @@ public class Ebook {
 	}
 	public void setEbookState(String ebookState) {
 		this.ebookState = ebookState;
+	}
+	public String getCategoryState() {
+		return categoryState;
+	}
+	public void setCategoryState(String categoryState) {
+		this.categoryState = categoryState;
 	}
 	public String getCreateDate() {
 		return createDate;

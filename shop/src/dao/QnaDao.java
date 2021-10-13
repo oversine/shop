@@ -79,7 +79,7 @@ public class QnaDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "UPDATE qna SET qna_category = ?, qna_title = ?, qna_content = ?, qna_secret = ? WHERE qna_no = ?";
+		String sql = "UPDATE qna SET qna_category = ?, qna_title = ?, qna_content = ?, qna_secret = ?, update_date=NOW() WHERE qna_no = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		
 		stmt.setString(1, qna.getQnaCategory());

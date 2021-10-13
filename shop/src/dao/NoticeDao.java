@@ -16,7 +16,7 @@ public class NoticeDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "UPDATE notice SET notice_title = ?, notice_content = ? WHERE notice_no = ?";
+		String sql = "UPDATE notice SET notice_title = ?, notice_content = ?, update_date=NOW() WHERE notice_no = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		
 		stmt.setString(1, notice.getNoticeTitle());
