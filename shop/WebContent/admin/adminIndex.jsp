@@ -33,62 +33,82 @@
 <head>
 <meta charset="UTF-8">
 <title>관리자 페이지</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
 <div class="container">
 	<div>
 		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
 	</div>
+
+	<!-- start : submenu include -->
+	<div>
+		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
+	</div>
+	<!-- end : submenu include -->
 	<!-- start : submenu include -->
 	<div>
 		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
 	</div><br>
-	
 	<!-- end : submenu include -->
-	<h2>신규 공지사항</h2>
-	<table class="table table-striped" style="text-align: center;">
-		<%
-			for(Notice n : newNoticeList) {
-		%>
-			<tr>
-				<td><%=n.getNoticeNo()%></td>
-				<td><a href="<%=request.getContextPath()%>/selectNoticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>"><%=n.getNoticeTitle()%></a></td>
-				<td><%=n.getUpdateDate()%></td>
-			</tr>
-		<%
-			}
-		%>
-	</table><br>
-	
-	<h2>문의 미답변 리스트</h2>
-	<!-- 답변을 작성하지 않은 QNA 리스트 -->
-		<table class="table table-striped" style="text-align: center;">
-		<thead>
-			<tr>
-				<th>글 번호</th>
-				<th>카테고리</th>
-				<th>제목</th>
-				<th>ID</th>
-				<th>수정일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-				for(Qna qna : list) {
-			%>
-				<tr>
-					<td><%=qna.getQnaNo()%></td>
-					<td><%=qna.getQnaCategory()%></td>
-					<td><a href="<%=request.getContextPath()%>/selectQnaOne.jsp?qnaNo=<%=qna.getQnaNo()%>"><%=qna.getQnaTitle()%></a></td>
-					<td><%=qna.getMemberId()%></td>
-					<td><%=qna.getUpdateDate()%></td>
-				</tr>
-			<%
-				}
-			%>
-		</tbody>
-	</table>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card mb-4">
+				<div class="card-header">신규 공지사항</div>
+				<div class="table-responsive">
+					<table class="card-table table" style="text-align: center;">
+						<%
+							for(Notice n : newNoticeList) {
+						%>
+							<tr>
+								<td><%=n.getNoticeNo()%></td>
+								<td><a href="<%=request.getContextPath()%>/selectNoticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>"><%=n.getNoticeTitle()%></a></td>
+								<td><%=n.getUpdateDate()%></td>
+							</tr>
+						<%
+							}
+						%>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+		<div class="col-lg-12">
+			<div class="card mb-4">
+				<div class="card-header">문의 미답변 리스트</div>
+				<div class="table-responsive">
+					<!-- 답변을 작성하지 않은 QNA 리스트 -->
+					<table class="card-table table" style="text-align: center;">	
+						<thead>
+							<tr>
+								<th>글 번호</th>
+								<th>카테고리</th>
+								<th>제목</th>
+								<th>ID</th>
+								<th>수정일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+								for(Qna qna : list) {
+							%>
+								<tr>
+									<td><%=qna.getQnaNo()%></td>
+									<td><%=qna.getQnaCategory()%></td>
+									<td><a href="<%=request.getContextPath()%>/selectQnaOne.jsp?qnaNo=<%=qna.getQnaNo()%>"><%=qna.getQnaTitle()%></a></td>
+									<td><%=qna.getMemberId()%></td>
+									<td><%=qna.getUpdateDate()%></td>
+								</tr>
+							<%
+								}
+							%>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<!-- 페이징 번호 -->
 	<div style="text-align:center;">

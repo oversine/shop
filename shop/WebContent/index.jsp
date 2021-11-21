@@ -9,10 +9,10 @@
 <title>메인 화면</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
 <div class="container">
-
 	<div>
 		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
 	</div>
@@ -22,9 +22,6 @@
 		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
 	</div>
 	<!-- end : submenu include -->
-	<div class="jumbotron text-center">
-		<h1>신규 공지사항</h1>
-	</div>
 	<%	
 	// 검색어
 	String ebookTitle = "";
@@ -56,7 +53,6 @@
 	
 	// 인기 목록 5개
 	ArrayList<Ebook> popularEbookList = ebookDao.selectPopularEbookList();
-
 	// 신규책 목록 5개
 	ArrayList<Ebook> newEbookList = ebookDao.selectNewEbookList();
 	
@@ -71,97 +67,127 @@
 		ebookList = ebookDao.selectEbookListBySearchEbookTitle(categoryName, beginRow, ROW_PER_PAGE, ebookTitle);
 	}
 	%>
-	<!-- 신규 공지사항 5개 -->
-	<table class="table table-striped" style="text-align: center;">
-		<%
-			for(Notice n : newNoticeList) {
-		%>
-			<tr>
-				<td><%=n.getNoticeNo()%></td>
-				<td><a href="<%=request.getContextPath()%>/selectNoticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>"><%=n.getNoticeTitle()%></a></td>
-				<td><%=n.getUpdateDate()%></td>
-			</tr>
-		<%
-			}
-		%>
-	</table><br>
-	
-	<h2>신규 상품 목록</h2>
-	<table class="table table-striped" style="text-align: center;">
-		<tr>
-			<%	
-				int a = 0;
-				for(Ebook e : newEbookList) {
-			%>
-					<td>
-						<div>
-							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
-						</div>
-						<div><a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><%=e.getEbookTitle()%></a></div>
-						<div>
-							<%=e.getEbookPrice()%>	
-						</div>
-					</td>
-			<%
-				}
-			%>
-		</tr>
-	</table><br>	
+
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="card mb-4">
+				<div class="card-header">신규 상품 목록</div>
+				<div class="table-responsive">
+					<table class="card-table table" style="text-align: center;">
+						<tr>
+							<%	
+								int a = 0;
+								for(Ebook e : newEbookList) {
+							%>
+									<td>
+										<div>
+											<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+										</div>
+										<div><a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><%=e.getEbookTitle()%></a></div>
+										<div>
+											<%=e.getEbookPrice()%>	
+										</div>
+									</td>
+							<%
+								}
+							%>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
 		
-	<h2>인기 상품 목록</h2>
-	<table class="table table-striped" style="text-align: center;">
-		<tr>
-			<%	
-				int b = 0;
-				for(Ebook e : popularEbookList) {
-			%>
-					<td>
-						<div>
-							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
-						</div>
-						<div><a href=""><%=e.getEbookTitle()%></a></div>
-						<div>
-							<%=e.getEbookPrice()%>	
-						</div>
-					</td>
-			<%		
-				}
-			%>
-		</tr>
-	</table><br>	
+		<div class="col-lg-6">
+			<div class="card mb-4">
+				<div class="card-header">신규 공지사항</div>
+				<div class="table-responsive">
+					<table class="table table-striped" style="text-align: center;">
+						<%
+							for(Notice n : newNoticeList) {
+						%>
+							<tr>
+								<td><%=n.getNoticeNo()%></td>
+								<td><a href="<%=request.getContextPath()%>/selectNoticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>"><%=n.getNoticeTitle()%></a></td>
+								<td><%=n.getUpdateDate()%></td>
+							</tr>
+						<%
+							}
+						%>
+					</table>					
+				</div>
+			</div>
+		</div>
+	</div>
 	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card mb-4">
+				<div class="card-header">인기 상품 목록</div>
+				<div class="table-responsive">
+					<table class="card-table table" style="text-align: center;">
+						<tr>
+							<%	
+								int b = 0;
+								for(Ebook e : popularEbookList) {
+							%>
+									<td>
+										<div>
+											<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+										</div>
+										<div><a href=""><%=e.getEbookTitle()%></a></div>
+										<div>
+											<%=e.getEbookPrice()%>	
+										</div>
+									</td>
+							<%		
+								}
+							%>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>	
 	
-	<h2>전체 상품 목록</h2>
-	<!-- 전자책 목록 출력 -->
-	<table class="table table-striped" style="text-align: center;">
-		<tr>
-			<%	
-				int i = 0;
-				for(Ebook e : ebookList) {
-			%>
-					<td>
-						<div>
-							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
-						</div>
-						<div>
-							<%=e.getEbookTitle()%>
-						</div>
-						<div>
-							<%=e.getEbookPrice()%>	
-						</div>
-					</td>
-			<%		
-					// 한 전자책을 불러오고 1을 증가시키며 반복하다 5개를 불러온 경우 <tr></tr>을 통해 상품의 줄바꿈처리를 해 5개씩 가로 배열
-					i+=1;
-						if(i%5 == 0) {
-			%>
-							</tr><tr>
-			<%
-					}
-				}
-			%>
-		</tr>
-	</table><br>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card mb-4">
+				<div class="card-header">전체 상품 목록</div>
+				<div class="table-responsive">
+					<!-- 전자책 목록 출력 -->
+					<table class="card-table table" style="text-align: center;">
+						<tr>
+							<%	
+								int i = 0;
+								for(Ebook e : ebookList) {
+							%>
+									<td>
+										<div>
+											<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+										</div>
+										<div>
+											<%=e.getEbookTitle()%>
+										</div>
+										<div>
+											<%=e.getEbookPrice()%>	
+										</div>
+									</td>
+							<%		
+									// 한 전자책을 불러오고 1을 증가시키며 반복하다 5개를 불러온 경우 <tr></tr>을 통해 상품의 줄바꿈처리를 해 5개씩 가로 배열
+									i+=1;
+										if(i%5 == 0) {
+							%>
+											</tr><tr>
+							<%
+									}
+								}
+							%>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<!-- 페이징 번호 -->
 	<div style="text-align: center;">

@@ -262,7 +262,7 @@ public class EbookDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_state ebookState FROM ebook WHERE category_name=? AND category_state=? ORDER BY create_date DESC LIMIT ?, ?";
+		String sql = "SELECT ebook_no ebookNo, category_name categoryName, ebook_title ebookTitle, ebook_state ebookState, ebook_img ebookImg FROM ebook WHERE category_name=? AND category_state=? ORDER BY create_date DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, categoryName);
 		stmt.setString(2, "Y");
@@ -277,6 +277,7 @@ public class EbookDao {
 			e.setCategoryName(rs.getString("categoryName"));
 			e.setEbookTitle(rs.getString("ebookTitle"));
 			e.setEbookState(rs.getString("ebookState"));
+			e.setEbookImg(rs.getString("ebookImg"));
 			list.add(e);
 		}
 		rs.close();

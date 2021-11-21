@@ -137,13 +137,13 @@ public class NoticeDao {
 		return list;		
 	}
 	
-	// 2. 새로운 공지사항 5개 출력
+	// 2. 새로운 공지사항 6개 출력
 	public ArrayList<Notice> selectNewNoticeList() throws ClassNotFoundException, SQLException {
 		ArrayList<Notice> list = new ArrayList<>();
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT notice_no noticeNo, notice_title noticeTitle, notice_content noticeContent, update_date updateDate FROM notice ORDER BY create_date DESC LIMIT 0, 5";
+		String sql = "SELECT notice_no noticeNo, notice_title noticeTitle, notice_content noticeContent, update_date updateDate FROM notice ORDER BY create_date DESC LIMIT 0, 6";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 	 	
 	 	ResultSet rs = stmt.executeQuery();

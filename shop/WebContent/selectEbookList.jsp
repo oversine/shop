@@ -48,9 +48,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>책 판매 페이지</title>
+<title>책 판매</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
 <div class="container">
@@ -65,12 +66,14 @@
 	<!-- end : submenu include -->
 	
 	<div>
-	<ul class="list-group list-group-horizontal">
+	<ul class="nav nav-tabs nav-justified">
 	<% 
 		for(Category c : categoryList) {
 			if(c.getCategoryState().equals("Y")) {
 	%>
-		<li class="list-group-item list-group-item-action list-group-item-secondary"><a href="<%=request.getContextPath()%>/selectEbookList.jsp?categoryName=<%=c.getCategoryName()%>"><%=c.getCategoryName()%></a></li>
+				<li class="nav-item">
+					<a class="nav-link active" href="<%=request.getContextPath()%>/selectEbookList.jsp?categoryName=<%=c.getCategoryName()%>"><%=c.getCategoryName()%></a>
+				</li>
 	<% 
 			}
 		}
@@ -78,37 +81,45 @@
 	</ul>
 	</div>
 	
-	<!-- 전자책 목록 출력 : 카테고리별 출력 -->
-	<table class="table table-striped" style="text-align: center;">
-		<tr>
-			<%	
-				int i = 0;
-				for(Ebook e : ebookList) {
-			%>
-					<td>
-						<div>
-							<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
-						</div>
-						<div>
-							<%=e.getEbookTitle()%>
-						</div>
-						<div>
-							<%=e.getEbookPrice()%>	
-						</div>
-					</td>
-			<%		
-					// 한 전자책을 불러오고 1을 증가시키며 반복하다 5개를 불러온 경우 <tr></tr>을 통해 상품의 줄바꿈처리를 해 5개씩 가로 배열
-					i+=1;
-					if(i%5 == 0) {
-			%>
-						</tr><tr>
-			<%
-					}
-				}
-			%>
-		</tr>
-	</table><br>
-	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card mb-4">
+				<div class="card-header"><%=categoryName%></div>
+				<div class="table-responsive">	
+					<!-- 전자책 목록 출력 : 카테고리별 출력 -->
+					<table class="card-table table" style="text-align: center;">
+						<tr>
+							<%	
+								int i = 0;
+								for(Ebook e : ebookList) {
+							%>
+									<td>
+										<div>
+											<a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=e.getEbookNo()%>"><img src="<%=request.getContextPath()%>/image/<%=e.getEbookImg()%>" width="200" height="200"></a>
+										</div>
+										<div>
+											<%=e.getEbookTitle()%>
+										</div>
+										<div>
+											<%=e.getEbookPrice()%>	
+										</div>
+									</td>
+							<%		
+									// 한 전자책을 불러오고 1을 증가시키며 반복하다 5개를 불러온 경우 <tr></tr>을 통해 상품의 줄바꿈처리를 해 5개씩 가로 배열
+									i+=1;
+									if(i%5 == 0) {
+							%>
+										</tr><tr>
+							<%
+									}
+								}
+							%>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- 페이징 번호 -->
 	<div style="text-align: center;">
 		<%	

@@ -24,9 +24,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>전자책 수정 페이지</title>
+<title>전자책 수정</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
 	<div class="container">
