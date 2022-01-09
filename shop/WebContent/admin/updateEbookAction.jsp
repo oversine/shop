@@ -7,25 +7,39 @@
 <%	
 	request.setCharacterEncoding("utf-8");		
 
-	MultipartRequest mr = new MultipartRequest(request, "C:/Users/subin/Downloads/git/shop/WebContent/image", 1024*1024*1024, "utf-8", new DefaultFileRenamePolicy());
+	MultipartRequest mr = new MultipartRequest(request, "/var/lib/tomcat9/webapps/shop/image", 1024*1024*1024, "utf-8", new DefaultFileRenamePolicy());
 	
 	// 문제가 생겨 값이 아예 안들어오거나 공백을 입력받고 넘어온 경우
-	if(mr.getParameter("ebookNo") == null || mr.getParameter("ebookPrice") == null){
+	if(mr.getParameter("ebookNo") == null || mr.getParameter("categoryName") == null || mr.getParameter("ebookTitle") == null || mr.getParameter("ebookAuthor") == null || mr.getParameter("ebookCompany") == null || mr.getParameter("ebookPageCount") == null || mr.getParameter("ebookPrice") == null || mr.getParameter("ebookSummary") == null || mr.getParameter("ebookState") == null){
 			response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
 			return;
 	}
 		
-	if(mr.getParameter("ebookNo").equals("") || mr.getParameter("ebookPrice").equals("")){
+	if(mr.getParameter("ebookNo").equals("") || mr.getParameter("categoryName").equals("") || mr.getParameter("ebookTitle").equals("") || mr.getParameter("ebookAuthor").equals("") || mr.getParameter("ebookCompany").equals("") || mr.getParameter("ebookPageCount").equals("") || mr.getParameter("ebookPrice").equals("") || mr.getParameter("ebookSummary").equals("") || mr.getParameter("ebookState").equals("")){
 			response.sendRedirect(request.getContextPath() + "/admin/selectEbookList.jsp");
 			return;
 	}
 	
 	int ebookNo = Integer.parseInt(mr.getParameter("ebookNo"));
+	String categoryName = mr.getParameter("categoryName");
+	String ebookTitle = mr.getParameter("ebookTitle");
+	String ebookAuthor = mr.getParameter("ebookAuthor");
+	String ebookCompany = mr.getParameter("ebookCompany");
+	int ebookPageCount = Integer.parseInt(mr.getParameter("ebookPageCount"));
 	int ebookPrice = Integer.parseInt(mr.getParameter("ebookPrice"));
+	String ebookSummary = mr.getParameter("ebookSummary");
+	String ebookState = mr.getParameter("ebookState");
 	String ebookImg = mr.getFilesystemName("ebookImg");
 	Ebook ebook = new Ebook();
 	ebook.setEbookNo(ebookNo);
+	ebook.setCategoryName(categoryName);
+	ebook.setEbookTitle(ebookTitle);
+	ebook.setEbookAuthor(ebookAuthor);
+	ebook.setEbookCompany(ebookCompany);
+	ebook.setEbookPageCount(ebookPageCount);
 	ebook.setEbookPrice(ebookPrice);
+	ebook.setEbookSummary(ebookSummary);
+	ebook.setEbookState(ebookState);
 	ebook.setEbookImg(ebookImg);
 	
 	EbookDao ebookDao = new EbookDao();

@@ -10,6 +10,24 @@ import commons.DBUtil;
 import vo.Ebook;
 
 public class EbookDao {	
+	// 9. 관리자 전자책 삭제
+	public void deleteEbook(int ebookNo) throws ClassNotFoundException, SQLException {
+		System.out.println(ebookNo + "<-- deleteEbook.ebookNo");
+
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM ebook WHERE ebook_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ebookNo);
+		
+		// System.out.println(stmt);
+		
+		stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+	}
+	
 	// 8. 카테고리 사용여부 변경시 전자책 DB 수정
 	public void updateEbookCategoryState(Ebook ebook) throws ClassNotFoundException, SQLException {
 		System.out.println(ebook.toString() + "<-- updateEbookCategoryState");

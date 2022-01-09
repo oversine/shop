@@ -50,7 +50,7 @@
 	<form id="isbnCheckForm" action="<%=request.getContextPath()%>/admin/isbnCheckAction.jsp" method="post">
 		<div class="form-group">
 		<label for="isbn">ISBN : </label>
-			<input type ="text" class="form-control" placeholder="도서 ISBN 번호를 입력해주세요" id="isbnCheck" name="isbnCheck">
+			<input type ="text" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" class="form-control" placeholder="도서 ISBN 번호를 입력해주세요" id="isbnCheck" name="isbnCheck">
 		</div>
 		<button id="btn" type="button" class="btn btn-primary">중복 검사</button>
 	</form><br>
@@ -121,6 +121,8 @@
 				alert('도서 ISBN 번호를 입력하세요');
 				return;
 			}
+			// 주소로 문자열을 전송할때 특수문자로 인해 생기는 서버 관련 오류를 해결하기 위해 문자를 인코딩 후 전송
+			$('#isbnCheckForm').value = encodeURIComponent($('#isbnCheckForm').value);
 			$('#isbnCheckForm').submit();
 		});
 	

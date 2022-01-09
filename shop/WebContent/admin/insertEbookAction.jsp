@@ -6,7 +6,7 @@
 <%
 	request.setCharacterEncoding("utf-8");	
 	
-	MultipartRequest mr = new MultipartRequest(request, "C:/Users/subin/Downloads/git/shop/WebContent/image", 1024*1024*1024, "utf-8", new DefaultFileRenamePolicy());
+	MultipartRequest mr = new MultipartRequest(request, "/var/lib/tomcat9/webapps/shop/image", 1024*1024*1024, "utf-8", new DefaultFileRenamePolicy());
 	// System.out.println(mr.getParameter("ebookIsbn"));
 	// System.out.println(mr.getParameter("categoryName"));
 	// System.out.println(mr.getParameter("ebookTitle"));

@@ -30,11 +30,11 @@
 	<form id="loginForm" method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
 		<div class="form-group">
 		<label for="memberId">Id : </label>
-			<input type ="text" class="form-control" placeholder="ID를 입력해주세요" id="memberId" name="memberId" >
+			<input type ="text" class="form-control" value="admin" placeholder="ID를 입력해주세요" id="memberId" name="memberId" >
 		</div>
 		<div class="form-group">
 		<label for="memberPw">비밀번호 : </label>
-			<input type ="password" class="form-control" placeholder="비밀번호를 입력해주세요" id="memberPw" name="memberPw" >
+			<input type ="password" class="form-control" value=1 placeholder="비밀번호를 입력해주세요" id="memberPw" name="memberPw" >
 		</div>
 		<div><button id="loginBtn" type="button" class="btn btn-primary">로그인</button></div>
 	</form>

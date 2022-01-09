@@ -5,10 +5,6 @@
 	request.setCharacterEncoding("utf-8");		
 
 	Member loginMember = (Member)session.getAttribute("loginMember");
-	if(loginMember == null || loginMember.getMemberLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/index.jsp");
-		return;
-	}
 	
 	if(request.getParameter("orderNo") == null){
 		response.sendRedirect(request.getContextPath() + "/admin/selectOrderList.jsp");
@@ -35,15 +31,30 @@
 	<div>
 		<jsp:include page="/partial/memberMenu.jsp"></jsp:include>
 	</div>
-
-	<!-- start : submenu include -->
+	
 	<div>
-		<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
+		<jsp:include page="/partial/mainMenu.jsp"></jsp:include>
 	</div>
-	<!-- end : submenu include -->
+	
+	<% 
+		if(loginMember.getMemberLevel() == 1) {
+	%>
+			<!-- start : submenu include -->
+			<div>
+				<jsp:include page="/partial/adminMenu.jsp"></jsp:include>
+			</div>
+			<!-- end : submenu include -->
+	<%
+		}
+	%>
 	<%
 		OrderDao orderDao = new OrderDao();
 		OrderEbookMember oem = orderDao.selectOrderOne(orderNo);
+		
+		if(loginMember == null || oem.getMember().getMemberNo() != loginMember.getMemberNo() && loginMember.getMemberLevel() < 1) {
+			response.sendRedirect(request.getContextPath()+"/index.jsp");
+			return;
+		}
 	%>
 	<div>
 	<table class="table table-bordered table-dark table-striped">
@@ -57,7 +68,17 @@
 		</tr>
 		<tr>
 			<td>전자책</td>
-			<td><a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=oem.getEbook().getEbookNo()%>"><%=oem.getEbook().getEbookTitle()%></a></td>
+			<% 
+				if(loginMember.getMemberLevel() == 1) {
+			%>
+					<td><a href="<%=request.getContextPath()%>/admin/selectEbookOne.jsp?ebookNo=<%=oem.getEbook().getEbookNo()%>"><%=oem.getEbook().getEbookTitle()%></a></td>
+			<%		
+				} else {
+			%>		
+					<td><a href="<%=request.getContextPath()%>/selectEbookOne.jsp?ebookNo=<%=oem.getEbook().getEbookNo()%>"><%=oem.getEbook().getEbookTitle()%></a></td>
+			<%		
+				}
+			%>
 		</tr>
 		<tr>
 			<td>회원 번호</td>
